@@ -11,9 +11,8 @@
 #source "$HOME/Desktop/Projects/ROS/ROS_Industrial_Training/ros_industrial_training/training/.training_units.bash" # training script
 
 # catkin workspaces (Overlays packages previously defined in the ROS_PACKAGE_PATH)
-script="$HOME/ros/$ROS_DISTRO/catkin_ws/devel/setup.bash"
+script="$HOME/ros/$ROS_VER/catkin_ws/devel/setup.bash"
 if [ -f "$script" ]; then
-	echo "source script $script"
 	source "$script" 
 fi
 
