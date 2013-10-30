@@ -15,5 +15,5 @@ Instructions
 		source "$HOME/linux_config/general/setup.bash"
 
 		# ros setup
-		source "$HOME/linux_config/ros/${ros_session_distro}/setup.bash"
+		source "$HOME/linux_config/ros/hydro/setup.bash"
 
