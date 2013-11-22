@@ -10,7 +10,10 @@
 script="$HOME/ros/$ROS_VER/catkin_ws/devel/setup.bash"
 if [ -f "$script" ]; then
 	source "$script"
-fi 
+fi
+
+# rosbuild stack/package directories 
+USER_LIBRARY_PATH="$HOME/ros/$ROS_VER/rosbuild"
 
 # Setting ROS PACKAGE PATH
 export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$USER_LIBRARY_PATH
