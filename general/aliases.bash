@@ -9,6 +9,7 @@ ROBOT_WORKCELL_1_IP="000.000.00.000"
 alias cd_gradle_tutorials="cd ~/Desktop/Programming/Tutorials/gradle"
 alias eclipse="~/Desktop/EclipseClassic_Kepler"
 alias eclipse_cdt="~/Desktop/EclipseCdt_Indigo"
+alias ssh_session="$HOME/linux_config/general/ssh_session.bash"
 
 # ssh alias lists
 arg="--tab-with-profile=BlueRoom2 --command='ssh -X jnicho@$ROBOT_WORKCELL_1_IP'"
