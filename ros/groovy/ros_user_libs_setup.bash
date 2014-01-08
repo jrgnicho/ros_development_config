@@ -17,6 +17,6 @@ if [ -f "$script" ]; then
 fi
 
 # Setting ROS PACKAGE PATH
-export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$USER_LIBRARY_PATH
+#export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$USER_LIBRARY_PATH
 
 echo "USER_LIBRARY_PATH has been added to the ros path"
