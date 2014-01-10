@@ -8,7 +8,7 @@ PROFILE="Default"
 # check arguments
 if [[ ( "$#" -lt 2 )]]; then
 	echo "must pass user name and ip as follows: ssh_session.bash username ipaddress"
-	return
+	exit
 else
 	IP=$2
 	USER=$1
