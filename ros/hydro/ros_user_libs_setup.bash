@@ -13,9 +13,11 @@ if [ -f "$script" ]; then
 fi
 
 # rosbuild stack/package directories 
-USER_LIBRARY_PATH="$HOME/ros/$ROS_DISTRO/rosbuild"
+#USER_LIBRARY_PATH="$HOME/ros/$ROS_DISTRO/rosbuild"
 
 # Setting ROS PACKAGE PATH
-export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$USER_LIBRARY_PATH
+if [ -n "$USER_LIBRARY_PATH" ] ; then
+	export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$USER_LIBRARY_PATH
+fi
 
 echo "USER_LIBRARY_PATH has been added to the ros path"
