@@ -7,8 +7,8 @@ ROBOT_WORKCELL_1_IP="000.000.00.000"
 
 # command alias list
 alias cd_gradle_tutorials="cd ~/Desktop/Programming/Tutorials/gradle"
-alias eclipse="~/Desktop/EclipseClassic_Kepler"
-alias eclipse_cdt="~/Desktop/EclipseCdt_Indigo"
+alias eclipse="~/Desktop/eclipse"
+alias eclipse_cdt="~/Desktop/eclipse_cdt"
 alias ssh_session="$HOME/linux_config/general/ssh_session.bash"
 alias ros_session="$HOME/linux_config/general/ros_session.bash"
 
