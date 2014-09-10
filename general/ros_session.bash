@@ -2,6 +2,7 @@
 
 ROS_DISTRO=""
 PROFILE="Default"
+CATKIN_WS="catkin_ws"
 
 
 # check arguments
@@ -15,6 +16,12 @@ fi
 if [[ ( "$#" -ge 2 )]]; then
 	PROFILE=$2
 fi
+
+# check selected workspace env variable
+if [ ! -z "$SELECTED_CATKIN_WS" ]; then
+	CATKIN_WS=$SELECTED_CATKIN_WS
+fi
+	
 
 # check directory
 if [ ! -d "$LINUX_CONF_PATH/ros/$ROS_DISTRO" ]; then

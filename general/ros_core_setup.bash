@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# variables
+CATKIN_WS="catkin_ws"
+
 # check arguments
 if [[ ( "$#" -lt 1 )]]; then
 	echo "$(tput setaf 1)must pass name of ros distribution (groovy, hydro, indigo, etc) $(tput sgr0)"
@@ -8,13 +11,23 @@ else
 	ROS_DISTRO=$1
 fi 
 
+if [[ ( "$#" -eq 2 )]]; then
+	CATKIN_WS=$2
+fi
+
 # ros workpace setup variables
 ROSBUILD_DIR="$HOME/ros/$ROS_DISTRO/rosbuild"
-CATKIN_DIR="$HOME/ros/$ROS_DISTRO/catkin_ws"
+CATKIN_DIR="$HOME/ros/$ROS_DISTRO/$CATKIN_WS"
 
 # check directory for configuration scripts
 if [ ! -d "$LINUX_CONF_PATH/ros/$ROS_DISTRO" ]; then
 	echo "$(tput setaf 1)This distribution of ros ($ROS_DISTRO) has not been setup with configuration scripts $(tput sgr0)"
+	exit 
+fi
+
+# check catkin workspace directory
+if [ ! -d "$CATKIN_DIR" ]; then
+	echo "$(tput setaf 1)The catkin workspace ($CATKIN_DIR) does not exits $(tput sgr0)"
 	exit 
 fi
 
