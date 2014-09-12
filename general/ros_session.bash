@@ -125,6 +125,12 @@ function main()
 					fi
 					;;
 
+				-p|--profile)
+
+					PROFILE=$OPTARG
+					shift 2
+					;;
+
 				--)
 					echo "finish parsing options"
 					break;;
