@@ -145,8 +145,6 @@ function main()
 		let OPTIND=OPTIND+1
 	done
 
-	echo "Arguments: $@"
-
 	# positional arg ros-distro
 	if [ $# -ge 2 ]; then
 		ROS_DISTRO=$2
