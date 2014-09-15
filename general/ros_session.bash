@@ -4,8 +4,13 @@ ROS_DISTRO=""
 PROFILE="Default"
 CATKIN_WS="catkin_ws"
 
-SHORT_OPTIONS="r:w:l:p:"
-LONG_OPTIONS="ros-distro:,workspace:,list-workspaces:profile:"
+SHORT_OPTIONS="r:w:l:p:h"
+LONG_OPTIONS="ros-distro:,workspace:,list-workspaces:profile:help"
+HELP_TEXT="Usage:\n
+\t -r|--ros-distro [ros-distro] -w|--workspace [workspace name] 
+\t -l|--list-workspaces\n
+\t -h|--help \n"
+
 
 function check_supported_ros_distro()
 {
@@ -83,64 +88,78 @@ function list_catkin_workspaces()
 
 function main()
 {
-	if [ $# -eq 1 ]; then
-		ROS_DISTRO=$1
-		echo "ros-distro: $ROS_DISTRO" 
+	PARSED_OPTIONS=$(getopt -n "$0" -o $SHORT_OPTIONS --long $LONG_OPTIONS -- "$@")
 
-	else
+	#Bad arguments, something has gone wrong with the getopt command.
+	if [ $? -ne 0 ];
+	then
+		exit 1
+	fi
+	 
+	# A little magic, necessary when using getopt.
+	eval set -- "$PARSED_OPTIONS"		
 
-		PARSED_OPTIONS=$(getopt -n "$0" -o $SHORT_OPTIONS --long $LONG_OPTIONS -- "$@")
+	while true; do
+		OPTARG=$2		
+		case "$1" in
+			-r|--ros-distro)
+				echo "ros-distro selected $OPTARG"
+				ROS_DISTRO=$OPTARG
+				shift 2
+				;;
+
+			-w|--workspace)
+				echo "catkin workspace selected $OPTARG"
+				CATKIN_WS=$OPTARG
+				shift 2
+				;;
+
+			-l|--list-workspaces)
+
+				if(! list_catkin_workspaces $OPTARG); then
+					echo "ros $2 has no catkin workspaces"
+					exit 1
+				else
+					exit 0
+				fi
+				;;
+
+			-h|--help)
+				$(echo -e $HELP_TEXT)
+				shift 2
+				;;
+
+			-p|--profile)
+
+				PROFILE=$OPTARG
+				shift 2
+				;;
+
+			--)
+				#echo "finished parsing options"
+				break;;
+
+
+		esac
 	
-		#Bad arguments, something has gone wrong with the getopt command.
-		if [ $? -ne 0 ];
-		then
-			exit 1
-		fi
-		 
-		# A little magic, necessary when using getopt.
-		eval set -- "$PARSED_OPTIONS"
+		let OPTIND=OPTIND+1
+	done
 
-		while true; do
-			OPTARG=$2		
-			case "$1" in
-				-r|--ros-distro)
-					echo "ros-distro selected $OPTARG"
-					ROS_DISTRO=$OPTARG
-					shift 2
-					;;
+	echo "Arguments: $@"
 
-				-w|--workspace)
-					echo "catkin workspace selected $OPTARG"
-					CATKIN_WS=$OPTARG
-					shift 2
-					;;
+	# positional arg ros-distro
+	if [ $# -ge 2 ]; then
+		ROS_DISTRO=$2
+	fi
 
-				-l|--list-workspaces)
+	# positional arg workspace
+	if [ $# -ge 3 ]; then
+		CATKIN_WS=$3
+	fi
 
-					if(! list_catkin_workspaces $OPTARG); then
-						echo "ros $2 has no catkin workspaces"
-						exit 1
-					else
-						exit 0
-					fi
-					;;
-
-				-p|--profile)
-
-					PROFILE=$OPTARG
-					shift 2
-					;;
-
-				--)
-					echo "finish parsing options"
-					break;;
-
-
-			esac
-		
-			let OPTIND=OPTIND+1
-		done
-
+		# positional arg profile
+	if [ $# -ge 4 ]; then
+		PROFILE=$4
 	fi
 
 	# check ros distro
