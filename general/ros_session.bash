@@ -7,9 +7,9 @@ CATKIN_WS="catkin_ws"
 SHORT_OPTIONS="r:w:l:p:h"
 LONG_OPTIONS="ros-distro:,workspace:,list-workspaces:profile:help"
 HELP_TEXT="Usage:\n
-\t -r|--ros-distro [ros-distro] -w|--workspace [workspace name] 
-\t -l|--list-workspaces\n
-\t -h|--help \n"
+-r|--ros-distro [ros-distro] -w|--workspace [workspace name]\n
+-l|--list-workspaces [ros-distro]\n
+-h|--help \n"
 
 
 function check_supported_ros_distro()
@@ -125,8 +125,8 @@ function main()
 				;;
 
 			-h|--help)
-				$(echo -e $HELP_TEXT)
-				shift 2
+				echo -e $HELP_TEXT
+				exit 0
 				;;
 
 			-p|--profile)
