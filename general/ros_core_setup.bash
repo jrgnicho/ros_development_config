@@ -11,7 +11,7 @@ else
 	ROS_DISTRO=$1
 fi 
 
-if [[ ( "$#" -eq 2 )]]; then
+if [[ ( "$#" -ge 2 )]]; then
 	CATKIN_WS=$2
 fi
 
@@ -38,7 +38,7 @@ source "/opt/ros/$ROS_DISTRO/setup.bash"
 source "$HOME/linux_config/general/ros_create_workspace.bash" $ROS_DISTRO $CATKIN_DIR $ROSBUILD_DIR
 
 # ros catkin workspace setup
-script="$HOME/ros/$ROS_DISTRO/catkin_ws/devel/setup.bash"
+script="$CATKIN_DIR/devel/setup.bash"
 if [ -f "$script" ]; then
 	source "$script"
 else
