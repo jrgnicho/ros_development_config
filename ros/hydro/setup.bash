@@ -2,7 +2,7 @@
 CATKIN_WS="catkin_ws"
 ROS_DISTRO="hydro"
 
-if [[ ( "$#" -gt 0 )]]; then
+if [[ ( "$#" -ge 1 )]]; then
 	CATKIN_WS=$1
 fi
 
