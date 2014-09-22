@@ -5,7 +5,7 @@ PROFILE="Default"
 CATKIN_WS="catkin_ws"
 
 SHORT_OPTIONS="r:w:l:p:h"
-LONG_OPTIONS="ros-distro:,workspace:,list-workspaces:profile:help"
+LONG_OPTIONS="ros-distro:,workspace:,list-workspaces:,profile:,help"
 HELP_TEXT="Usage:\n
 -r|--ros-distro [ros-distro] -w|--workspace [workspace name]\n
 -l|--list-workspaces [ros-distro]\n
