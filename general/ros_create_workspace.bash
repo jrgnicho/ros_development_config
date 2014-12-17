@@ -2,25 +2,24 @@
 
 ROS_DISTRO=""
 # check arguments
-if [[ ( "$#" -lt 1 )]]; then
-	echo "$(tput setaf 1)must pass name of ros distribution (groovy, hydro, etc)$(tput sgr0)"
+if [[ ( "$#" -lt 2 )]]; then
+	echo "$(tput setaf 1)must pass name of ros distribution (groovy, hydro, etc) and catkin workspace name$(tput sgr0)"
 	exit
 else
 	ROS_DISTRO=$1
 fi 
 
+ROS_SETUP_SCRIPT="/opt/ros/$ROS_DISTRO/setup.bash"
+if [ -f $ROS_SETUP_SCRIPT ]; then
+  source "$ROS_SETUP_SCRIPT"
+else
+  echo "$(tput setaf 1)ros-$ROS_DISTRO has not been installed, aborting$(tput sgr0)"
+  exit
+fi
+
 # default ros workspace paths
 ROSBUILD_DIR="$HOME/ros/$ROS_DISTRO/rosbuild"
-CATKIN_DIR="$HOME/ros/$ROS_DISTRO/catkin_ws"
-
-# check arguments for ros workspace paths
-if [[ ( "$#" -gt 1 )]]; then
-	CATKIN_DIR=$2
-fi
-
-if [[ ( "$#" -gt 2 )]]; then
-	ROSBUILD_DIR=$3
-fi
+CATKIN_DIR="$HOME/ros/$ROS_DISTRO/$2"
 
 #create rosbuild
 if [ ! -d $ROSBUILD_DIR ]; then
