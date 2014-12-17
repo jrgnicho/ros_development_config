@@ -29,14 +29,14 @@ fi
 source "/opt/ros/$ROS_DISTRO/setup.bash"
 
 # ros workspaces initialization
-source "$HOME/linux_config/general/ros_create_workspace.bash" $ROS_DISTRO $CATKIN_DIR $ROSBUILD_DIR
+source "$HOME/linux_config/general/ros_create_workspace.bash" $ROS_DISTRO $CATKIN_WS $ROSBUILD_DIR
 
 # ros catkin workspace setup
 script="$CATKIN_DIR/devel/setup.bash"
 if [ -f "$script" ]; then
 	source "$script"
 else
-	echo "$(tput setaf 1)Error sourcing the catkin workspace setup script.$(tput sgr0)"
+	echo "$(tput setaf 1)Error sourcing the catkin workspace setup script $script$(tput sgr0)"
 fi
 
 # rosbuild workspace setup
