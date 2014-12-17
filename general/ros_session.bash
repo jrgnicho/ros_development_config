@@ -3,6 +3,7 @@
 ROS_DISTRO=""
 PROFILE="Default"
 CATKIN_WS="catkin_ws"
+ROS_SYSTEM_PATH="/opt/ros"
 
 SHORT_OPTIONS="r:w:l:p:h"
 LONG_OPTIONS="ros-distro:,workspace:,list-workspaces:,profile:,help"
@@ -17,7 +18,7 @@ function check_supported_ros_distro()
 	ros_distro=$1
 	
 	# check directory
-	if [ ! -d "$LINUX_CONF_PATH/ros/$ros_distro" ]; then		
+	if [ ! -d "$ROS_SYSTEM_PATH/$ros_distro" ]; then		
 		return 1 
 	else
 		return 0
@@ -174,9 +175,9 @@ function main()
 
 	# construct bash file
 	cp -f ~/.bashrc ${LINUX_CONF_PATH}/bashrc.tmp
-	echo "source $LINUX_CONF_PATH/ros/$ROS_DISTRO/setup.bash $CATKIN_WS">>"$LINUX_CONF_PATH/bashrc.tmp"
+	echo "source $LINUX_CONF_PATH/general/ros_core_setup.bash $ROS_DISTRO $CATKIN_WS">>"$LINUX_CONF_PATH/bashrc.tmp"
 	ARG="--tab-with-profile=$PROFILE --command='bash --rcfile $LINUX_CONF_PATH/bashrc.tmp'"
-	COMMAND="gnome-terminal --title=ros-$ROS_DISTRO $ARG $ARG $ARG $ARG $ARG $ARG $ARG"
+	COMMAND="gnome-terminal --title='ros-$ROS_DISTRO: $CATKIN_WS' $ARG $ARG $ARG $ARG $ARG $ARG $ARG"
 
 	eval $COMMAND
 }
