@@ -169,7 +169,7 @@ function main()
 
 	# check catkin workspace
 	if(! check_catkin_workspace_exists $CATKIN_WS $ROS_DISTRO); then
-		echo "Catkin workspace $CATKIN_WS for ros $ROS_DISTRO was not found"
+		echo "$(tput setaf 1)Catkin workspace $CATKIN_WS for ros $ROS_DISTRO was not found$(tput sgr0)"
 		exit 1
 	fi
 
