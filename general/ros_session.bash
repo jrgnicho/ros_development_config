@@ -4,9 +4,10 @@ ROS_DISTRO=""
 PROFILE="Default"
 CATKIN_WS="catkin_ws"
 ROS_SYSTEM_PATH="/opt/ros"
+CREATE_NEW_WS=false
 
-SHORT_OPTIONS="r:w:l:p:h"
-LONG_OPTIONS="ros-distro:,workspace:,list-workspaces:,profile:,help"
+SHORT_OPTIONS="r:w:l:p:h:c"
+LONG_OPTIONS="ros-distro:,workspace:,list-workspaces:,profile:,help,create"
 HELP_TEXT="Usage:\n
 -r|--ros-distro [ros-distro] -w|--workspace [workspace name]\n
 -l|--list-workspaces [ros-distro]\n
@@ -104,13 +105,13 @@ function main()
 		OPTARG=$2		
 		case "$1" in
 			-r|--ros-distro)
-				echo "ros-distro selected $OPTARG"
+				#echo "ros-distro selected $OPTARG"
 				ROS_DISTRO=$OPTARG
 				shift 2
 				;;
 
 			-w|--workspace)
-				echo "catkin workspace selected $OPTARG"
+				#echo "catkin workspace selected $OPTARG"
 				CATKIN_WS=$OPTARG
 				shift 2
 				;;
@@ -136,8 +137,14 @@ function main()
 				shift 2
 				;;
 
+      -c| --create)
+
+        CREATE_NEW_WS=true
+        shift 1
+        ;;
+
 			--)
-				#echo "finished parsing options"
+				# finished parsing options
 				break;;
 
 
@@ -163,21 +170,39 @@ function main()
 
 	# check ros distro
 	if(! check_supported_ros_distro $ROS_DISTRO); then
-		echo "$(tput setaf 1)Configuration scripts for ros $ROS_DISTRO not found$(tput sgr0)"
+		echo "$(tput setaf 1)ROS Distribution '$ROS_DISTRO' was not found$(tput sgr0)"
 		exit 1
 	fi
 
 	# check catkin workspace
 	if(! check_catkin_workspace_exists $CATKIN_WS $ROS_DISTRO); then
-		echo "$(tput setaf 1)Catkin workspace $CATKIN_WS for ros $ROS_DISTRO was not found$(tput sgr0)"
-		exit 1
+
+    if $CREATE_NEW_WS ; then
+
+      # checking that required variables have been set
+      if [ "$ROS_DISTRO" == "" ] ; then
+        echo "$(tput setaf 1)ROS distribution has not been set; recommended use:$(tput sgr0)"
+        echo "$(tput setaf 1)ros_session -c [ros-distro] [catkin_ws]:$(tput sgr0)"
+        exit 1
+      fi
+
+      ROSBUILD_DIR="$HOME/ros/$ROS_DISTRO/rosbuild"
+
+      # workspace creation
+      source "$HOME/linux_config/general/ros_create_workspace.bash" $ROS_DISTRO $CATKIN_WS $ROSBUILD_DIR
+      
+    else
+		  echo "$(tput setaf 1)Catkin workspace $CATKIN_WS for ros $ROS_DISTRO was not found$(tput sgr0)"
+		  exit 1
+    fi
+
 	fi
 
 	# construct bash file
 	cp -f ~/.bashrc ${LINUX_CONF_PATH}/bashrc.tmp
 	echo "source $LINUX_CONF_PATH/general/ros_core_setup.bash $ROS_DISTRO $CATKIN_WS">>"$LINUX_CONF_PATH/bashrc.tmp"
 	ARG="--tab-with-profile=$PROFILE --command='bash --rcfile $LINUX_CONF_PATH/bashrc.tmp'"
-	COMMAND="gnome-terminal --title='ros-$ROS_DISTRO: $CATKIN_WS' $ARG $ARG $ARG $ARG $ARG $ARG $ARG"
+	COMMAND="gnome-terminal --title='ros-$ROS_DISTRO: $CATKIN_WS' $ARG $ARG $ARG $ARG $ARG $ARG $ARG $ARG"
 
 	eval $COMMAND
 }

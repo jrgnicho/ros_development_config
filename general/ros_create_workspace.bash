@@ -3,7 +3,7 @@
 ROS_DISTRO=""
 # check arguments
 if [[ ( "$#" -lt 2 )]]; then
-	echo "$(tput setaf 1)must pass name of ros distribution (groovy, hydro, etc) and catkin workspace name$(tput sgr0)"
+	echo "$(tput setaf 1)must pass name of ros distribution (hydro, indigo, etc) and catkin workspace name$(tput sgr0)"
 	exit
 else
 	ROS_DISTRO=$1
@@ -32,16 +32,24 @@ fi
 
 #create catkin
 if [ ! -d $CATKIN_DIR ]; then
-	echo "$(tput setaf 3)CATKIN workspace will be created at location $CATKIN_DIR$(tput sgr0)"
+	echo "$(tput setaf 3)CATKIN workspace creation started$(tput sgr0)"
 	mkdir -p "$CATKIN_DIR/src"
 	cd "$CATKIN_DIR/src"
 	catkin_init_workspace
 	cd ..
 	catkin_make
-	echo "$(tput setaf 3)CATKIN workspace was created at location $CATKIN_DIR$(tput sgr0)"
+	echo "$(tput setaf 3)CATKIN workspace creation completed. New workspace location is $CATKIN_DIR$(tput sgr0)"
 else
 	echo "$(tput setaf 3)CATKIN workspace found at location $CATKIN_DIR$(tput sgr0)"
 fi
+
+# copying ros console config file
+if [ ! -f "$CATKIN_DIR/rosconsole.config" ]; then
+  # copying default rosconsole config to workspace
+  echo "$(tput setaf 3)Copied default rosconsole.config to workspace directory$(tput sgr0)"
+  cp "$ROS_ROOT/config/rosconsole.config" "$CATKIN_DIR"
+fi
+
 
 
 cd $HOME

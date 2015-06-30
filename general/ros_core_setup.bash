@@ -28,9 +28,6 @@ fi
 # ros system setup script
 source "/opt/ros/$ROS_DISTRO/setup.bash"
 
-# ros workspaces initialization
-source "$HOME/linux_config/general/ros_create_workspace.bash" $ROS_DISTRO $CATKIN_WS $ROSBUILD_DIR
-
 # ros catkin workspace setup
 script="$CATKIN_DIR/devel/setup.bash"
 if [ -f "$script" ]; then
@@ -50,7 +47,8 @@ fi
 # setting up ros environment variables
 export MAKEFLAGS="-j1"
 export ROS_WORKSPACE="$CATKIN_DIR"
-export ROS_LOCATIONS="catkin_ws=$CATKIN_DIR:rosbuild=$ROSBUILD_DIR:linux_config=$HOME/linux_config/ros/hydro"
+export ROS_LOCATIONS="catkin_ws=$CATKIN_DIR:rosbuild=$ROSBUILD_DIR:linux_config=$HOME/linux_config"
+export ROSCONSOLE_CONFIG_FILE="$CATKIN_DIR/rosconsole.config"
 export ROS_PARALLEL_JOBS="-j2 -l2"
 export PYTHONPATH="$PYTHONPATH:$CATKIN_DIR/src:$ROSBUILD_DIR"
 
