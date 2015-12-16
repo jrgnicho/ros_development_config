@@ -51,6 +51,7 @@ export ROS_LOCATIONS="catkin_ws=$CATKIN_DIR:rosbuild=$ROSBUILD_DIR:linux_config=
 export ROSCONSOLE_CONFIG_FILE="$CATKIN_DIR/rosconsole.config"
 export ROS_PARALLEL_JOBS="-j2 -l2"
 export PYTHONPATH="$PYTHONPATH:$CATKIN_DIR/src:$ROSBUILD_DIR"
+export ROSCONSOLE_FORMAT='[${severity}]: ${message}; [node: ${node}]; [func: ${function}]'
 
 
 # check directory for optional configuration scripts
