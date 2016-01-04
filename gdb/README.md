@@ -1,13 +1,17 @@
-Eclipse C/C++ ROS Debugging 
-Prerequisites:
+## Eclipse C/C++ ROS Debugging 
+
+#### Prerequisites:
 -	Install Eclipse CDT (Tested on mars only)
 -	Install ROS
--	Create Catkin workspace
--	Install all required ROS and system dependencies
-In Linux Console:
--	Catkin Build with debug and eclipse flags
-  - 	catkin_make -DCMAKE_BUILD_TYPE=Debug --force-cmake -G"Eclipse CDT4 - Unix Makefiles"
-In Eclipse CDT:
+-	Create a catkin workspace
+-	Install all ROS and system dependencies required by your application in the caktin workspace
+
+####In Linux Console:
+-	Catkin Build with debug and eclipse flags, cd into your catkin workspace directory and run the following:
+  
+   	```catkin_make -DCMAKE_BUILD_TYPE=Debug --force-cmake -G"Eclipse CDT4 - Unix Makefiles" ```
+
+#### In Eclipse CDT:
 -	Import Project:
   - 	File -> Import -> General -> Existing Projects Into Workspace -> Browse to workspace “build” directory -> Finish
   - 	Rename Project [Optional] by right-clicking on the project header in the “Project Explorer” panel and click Rename.
@@ -28,10 +32,10 @@ In Eclipse CDT:
 -	Debug Configurations
   - 	Access the “Debug Configurations” window by right-clicking on Project -> Debug  As -> Debug Configurations 
   - 	Under “C/C++ Attach to Application”, find the configuration for the current project; if there isn’t a configuration then double click in order to create one.
-  - 	In the “Main” tab hit the “Browse” button under “C/C++ Application” and find the executable to be debugged and then click  “Apply” and “Debug”. For example, point to “/opt/ros/indigo/lib/moveit_ros_move_group/move_group” in order to debug the move_group executable.
-  - 	Load the gdbinit file: 
-    -	Select the Debugger tab and click the “Browse” button next to the “GDB command file” textbox.
-    - Browse to the location of the “~/linux_config/gdb/gdbinit” file downloaded earlier and click “OK”
+  - 	In the “Main” tab hit the “Browse” button under “C/C++ Application” and find the executable to be debugged and then click “Apply” and “Debug”; for example point to “/opt/ros/indigo/lib/moveit_ros_move_group/move_group” in order to debug the **move_group** executable.
+  -   Load the gdbinit file  
+    *	Select the Debugger tab and click the “Browse” button next to the “GDB command file” textbox.
+    * Browse to the location of the “~/linux_config/gdb/gdbinit” file downloaded earlier and click “OK”
 
   - In the “Select Process” window find the process to be debugged, in this example select “move_group” and click “OK”.  It is assumed that the process or program of interest is already running.
 
