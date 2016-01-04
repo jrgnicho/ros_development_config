@@ -1,8 +1,8 @@
-linux_config
+# linux_config
 ============
-shell scripts for configuring linux environment for ros
+Shell scripts for configuring linux environment for ros
 
-Instructions
+#### Instructions
 ============
 +	Place the "linux_config" repo in your home directory by running the following on the terminal
 		
@@ -12,27 +12,30 @@ Instructions
 +	Add the following lines to your bash file ".bashrc":
 	
 ```
-                 source "$HOME/linux_config/general/setup.bash"
+               source "$HOME/linux_config/general/setup.bash"
 ```                 
                             
 		
-+       In a terminal run the following to bring up ros enabled terminals
++       In a terminal run the following to create the **my_workspace** catkin workspace and bring up linux terminals configured to the newly created workspace
 
 ```
-	        ros_session hydro
+	        ros_session indigo my_catkin_workspace -c
 ```	        
-	        
++ 	If a catkin workspace already exist then just run the following to bring up the terminals configured to the existing workspace:
+```
+                ros_session indigo my_catkin_workspace
+```
             
-+       Alternatively, pass the name of an existing terminal profile to bring up the terminals with that profile
++       Also, pass the name of an existing terminal profile to bring up the terminals with that profile
 
 ```
-	        ros_session hydro profile1
+	        ros_session indigo my_catkin_workspace profile1
 ```	        
 
             
             
-+      If another ros released is installed on the local machine such as groovy, then run:
++      If another ros released is installed on the local machine such as **groovy**, then run:
 
 ```
-	       ros_session groovy profile1
+	       ros_session groovy my_catkin_workspace profile1
 ```
