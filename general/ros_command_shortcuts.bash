@@ -18,11 +18,22 @@ function __catkin_eclipse_setup__()
     build_flag="Debug"
   fi
 
-#  catkin build --force-cmake -G"Eclipse CDT4 - Unix Makefiles" --cmake-args -DCMAKE_BUILD_TYPE=$build_flag  && awk -f $(rospack find mk)/eclipse.awk .project > build/.project_with_env && mv build/.project_with_env build/.project
-  
+  catkin build  --force-cmake -G"Eclipse CDT4 - Unix Makefiles" -DCMAKE_BUILD_TYPE=$build_flag
+  __eclipse_project_files_gen__
+
+}
+
+function __eclipse_project_files_gen__()
+{
+  ROOT=$PWD 
   cd build
-  cmake ../src -G "Eclipse CDT4 - Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug
-  cd ..
+  for PROJECT in `find $PWD -name .project`; do
+      DIR=`dirname $PROJECT`
+      echo $DIR
+      cd $DIR
+      awk -f $(rospack find mk)/eclipse.awk .project > .project_with_env && mv .project_with_env .project
+  done
+  cd $ROOT
 }
 
 
