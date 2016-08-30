@@ -5,14 +5,33 @@ PROFILE="Default"
 CATKIN_WS="catkin_ws"
 ROS_SYSTEM_PATH="/opt/ros"
 CREATE_NEW_WS=false
+BUILD_TOOLS=("catkin-tools" "catkin_make") #(catkin-tools catkin_make)
+SELECTED_BUILD_TOOL="${BUILD_TOOLS[0]}"
 
-SHORT_OPTIONS="r:w:l:p:h:c"
-LONG_OPTIONS="ros-distro:,workspace:,list-workspaces:,profile:,help,create"
+SHORT_OPTIONS="r:w:l:p:c::h"
+LONG_OPTIONS="ros-distro:,workspace:,list-workspaces:,profile:,create::,help"
 HELP_TEXT="Usage:\n
 -r|--ros-distro [ros-distro] -w|--workspace [workspace name]\n
 -l|--list-workspaces [ros-distro]\n
+-c|--ros-distro [ros-distro] -w|--workspace [workspace name] --create\n
 -h|--help \n"
 
+function select_build_tool()
+{
+  for var in "${BUILD_TOOLS[@]}"
+  do
+
+    if [ "$var" == "$1" ]
+    then
+      SELECTED_BUILD_TOOL=$1
+      echo "Selected build tool '${SELECTED_BUILD_TOOL}'"
+      return 
+    fi
+  done
+
+  echo "Selected default build tool '${SELECTED_BUILD_TOOL}'"
+  return
+}
 
 function check_supported_ros_distro()
 {
@@ -140,12 +159,24 @@ function main()
       -c| --create)
 
         CREATE_NEW_WS=true
-        shift 1
+        select_build_tool $OPTARG
+        if [[ -z "$OPTARG" ]]; then
+          shift 1
+          echo "shifted 1 $OPTARG"
+        else
+          shift 2
+        fi
+
         ;;
 
 			--)
 				# finished parsing options
 				break;;
+
+      *)
+        #echo "no valid entry, shifting 1"
+        shift 1
+        ;;
 
 
 		esac
@@ -189,7 +220,7 @@ function main()
       ROSBUILD_DIR="$HOME/ros/$ROS_DISTRO/rosbuild"
 
       # workspace creation
-      source "$HOME/linux_config/general/ros_create_workspace.bash" $ROS_DISTRO $CATKIN_WS $ROSBUILD_DIR
+      source "$HOME/linux_config/general/ros_create_workspace.bash" $ROS_DISTRO $CATKIN_WS $SELECTED_BUILD_TOOL $ROSBUILD_DIR
       
     else
 		  echo "$(tput setaf 1)Catkin workspace $CATKIN_WS for ros $ROS_DISTRO was not found$(tput sgr0)"
