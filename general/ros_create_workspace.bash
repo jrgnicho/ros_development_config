@@ -18,7 +18,7 @@ function catkin_make_setup()
 	  catkin_make
 	  echo "$(tput setaf 3)CATKIN workspace creation completed. New workspace location is $CATKIN_DIR$(tput sgr0)"
   else
-	  echo "$(tput setaf 3)CATKIN workspace found at location $CATKIN_DIR$(tput sgr0)"
+	  echo "$(tput setaf 3)CATKIN workspace found at location $CATKIN_DIR, skip creation.$(tput sgr0)"
   fi
 }
 
@@ -32,7 +32,7 @@ function catkin_tools_setup()
 	  catkin build --jobs 4 --force-cmake --cmake-args -DCMAKE_BUILD_TYPE=Debug
 	  echo "$(tput setaf 3)CATKIN-TOOLS workspace creation completed. New workspace location is $CATKIN_DIR$(tput sgr0)"
   else
-	  echo "$(tput setaf 3)CATKIN-TOOLS workspace found at location $CATKIN_DIR$(tput sgr0)"
+	  echo "$(tput setaf 3)CATKIN-TOOLS workspace found at location $CATKIN_DIR, skip creation.$(tput sgr0)"
   fi
 }
 

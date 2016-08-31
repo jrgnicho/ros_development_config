@@ -36,9 +36,33 @@ function __eclipse_project_files_gen__()
   cd $ROOT
 }
 
+function __catkin_build__all__()
+{
+  build_flag=$1
+  if [ -z "$build_flag" ]; then
+    build_flag="Debug"
+  fi
+  options=$2
+  catkin build --jobs 4 $options --cmake-args -DCMAKE_BUILD_TYPE=$build_flag
+}
+
+function __catkin_build__pkg__()
+{
+  build_flag=$2
+  if [ -z "$build_flag" ]; then
+    build_flag="Debug"
+  fi
+  pkg=$1
+  options=$3  
+
+  catkin build --jobs 4 $options $pkg --cmake-args -DCMAKE_BUILD_TYPE=$build_flag
+}
+
 
 ### command alias list
 alias catkin_make_eclipse='__catkin_make_eclipse__'
-alias catkin_eclipse_setup='__catkin_eclipse_setup__'
+alias catkin_build_eclipse='__catkin_eclipse_setup__'
+alias cb='__catkin_build__all__'
+alias cbpkg='__catkin_build__pkg__'
 
 

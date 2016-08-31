@@ -162,7 +162,6 @@ function main()
         select_build_tool $OPTARG
         if [[ -z "$OPTARG" ]]; then
           shift 1
-          echo "shifted 1 $OPTARG"
         else
           shift 2
         fi
@@ -227,7 +226,9 @@ function main()
 		  exit 1
     fi
 
-	fi
+	else
+    echo "$(tput setaf 3)Catkin workspace already exists at $CATKIN_WS, skipping creation.$(tput sgr0)"
+  fi
 
 	# construct bash file
 	cp -f ~/.bashrc ${LINUX_CONF_PATH}/bashrc.tmp
