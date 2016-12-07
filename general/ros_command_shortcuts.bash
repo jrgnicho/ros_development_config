@@ -60,6 +60,7 @@ function __catkin_build__pkg__()
 
 
 ### command alias list
+alias catkin_gen_eclipse_project='__eclipse_project_files_gen__'
 alias catkin_make_eclipse='__catkin_make_eclipse__'
 alias catkin_build_eclipse='__catkin_eclipse_setup__'
 alias cb='__catkin_build__all__'
