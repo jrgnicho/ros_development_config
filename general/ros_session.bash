@@ -233,7 +233,7 @@ function main()
 	# construct bash file
 	cp -f ~/.bashrc ${LINUX_CONF_PATH}/bashrc.tmp
 	echo "source $LINUX_CONF_PATH/general/ros_core_setup.bash $ROS_DISTRO $CATKIN_WS">>"$LINUX_CONF_PATH/bashrc.tmp"
-	ARG="--tab-with-profile=$PROFILE --command='bash --rcfile $LINUX_CONF_PATH/bashrc.tmp'"
+	ARG="--tab --profile=$PROFILE --command='bash --rcfile $LINUX_CONF_PATH/bashrc.tmp'"
 	COMMAND="gnome-terminal --title='ros-$ROS_DISTRO: $CATKIN_WS' $ARG $ARG $ARG $ARG $ARG $ARG $ARG $ARG"
 
 	eval $COMMAND

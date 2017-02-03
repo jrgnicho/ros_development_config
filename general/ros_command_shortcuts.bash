@@ -18,7 +18,7 @@ function __catkin_eclipse_setup__()
     build_flag="Debug"
   fi
 
-  catkin build  --force-cmake -G"Eclipse CDT4 - Unix Makefiles" -DCMAKE_BUILD_TYPE=$build_flag
+  catkin build  -c --force-cmake -G"Eclipse CDT4 - Unix Makefiles" -DCMAKE_BUILD_TYPE=$build_flag
   __eclipse_project_files_gen__
 
 }
