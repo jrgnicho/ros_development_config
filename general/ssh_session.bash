@@ -3,6 +3,7 @@
 IP=""
 USER=""
 PROFILE="Default"
+TERMINAL_CMD="mate-terminal"
 
 
 # check arguments
@@ -23,7 +24,8 @@ fi
 FULL_ID="$USER@$IP"
 
 # construct command
-ARG="--tab-with-profile=$PROFILE --command='ssh -X $FULL_ID'"
-COMMAND="gnome-terminal $ARG $ARG $ARG $ARG $ARG $ARG $ARG"
+TERMINAL_TAB_ARGS="--title='$USER:ssh_session' --profile=$PROFILE --command='ssh -X $FULL_ID'"
+NEW_TAB_ARG="--tab $TERMINAL_TAB_ARGS"
+COMMAND="$TERMINAL_CMD --window $TERMINAL_TAB_ARGS $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG"
 
 eval $COMMAND

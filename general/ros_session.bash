@@ -7,6 +7,7 @@ ROS_SYSTEM_PATH="/opt/ros"
 CREATE_NEW_WS=false
 BUILD_TOOLS=("catkin-tools" "catkin_make") #(catkin-tools catkin_make)
 SELECTED_BUILD_TOOL="${BUILD_TOOLS[0]}"
+TERMINAL_CMD="mate-terminal"
 
 SHORT_OPTIONS="r:w:l:p:c::h"
 LONG_OPTIONS="ros-distro:,workspace:,list-workspaces:,profile:,create::,help"
@@ -233,8 +234,9 @@ function main()
 	# construct bash file
 	cp -f ~/.bashrc ${LINUX_CONF_PATH}/bashrc.tmp
 	echo "source $LINUX_CONF_PATH/general/ros_core_setup.bash $ROS_DISTRO $CATKIN_WS">>"$LINUX_CONF_PATH/bashrc.tmp"
-	ARG="--tab --profile=$PROFILE --command='bash --rcfile $LINUX_CONF_PATH/bashrc.tmp'"
-	COMMAND="gnome-terminal --title='ros-$ROS_DISTRO: $CATKIN_WS' $ARG $ARG $ARG $ARG $ARG $ARG $ARG $ARG"
+  TERMINAL_TAB_ARGS="--title='ros-$ROS_DISTRO: $CATKIN_WS' --profile=$PROFILE --command='bash --rcfile $LINUX_CONF_PATH/bashrc.tmp'"
+	NEW_TAB_ARG="--tab $TERMINAL_TAB_ARGS"
+	COMMAND="$TERMINAL_CMD --window $TERMINAL_TAB_ARGS $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG"
 
 	eval $COMMAND
 }
