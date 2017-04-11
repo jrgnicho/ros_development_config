@@ -28,8 +28,15 @@ fi
 # ros system setup script
 source "/opt/ros/$ROS_DISTRO/setup.bash"
 
-# ros catkin workspace setup
+# ros catkin workspace setup script (default)
 script="$CATKIN_DIR/devel/setup.bash"
+
+# check in case devel directory isn't default
+devel_dir=`catkin locate -w $CATKIN_DIR -d 2> /dev/null`
+if [ -n "$devel_dir" ]; then
+  script="$devel_dir/setup.bash"
+fi
+
 if [ -f "$script" ]; then
 	source "$script"
 else
