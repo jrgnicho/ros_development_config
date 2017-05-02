@@ -13,22 +13,15 @@ function __catkin_make_eclipse__()
 
 function __catkin_build_eclipse__()
 {
-  build_flag=$1
-
-  # setting build flag
-  if [ -z "$build_flag" ]; then
-    build_flag="Debug"  # defaults to Debug if none was passed
-  fi 
-  
 
   if [ "$#" -eq 0 ]; then # build entire workspace
-   catkin build -c --cmake-args -DCMAKE_BUILD_TYPE=$build_flag
+   catkin build -c
     __eclipse_ws_config__
   else
     for pkg in "$@"
     do
 
-      catkin build -c "$pkg" --cmake-args -DCMAKE_BUILD_TYPE=$build_flag
+      catkin build -c "$pkg"
       __eclipse_pkg_config__ $pkg
       
     done    
