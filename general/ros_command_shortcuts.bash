@@ -90,7 +90,7 @@ function __eclipse_pkg_config__()
   pkg_build_dir="$build_dir/$pkg_name"
   cd "$pkg_build_dir"
 
-  cmake "$src_dir" -DCMAKE_INSTALL_PREFIX="$install_dir" -DCATKIN_DEVEL_PREFIX="$devel_dir" -G"Eclipse CDT4 - Unix Makefiles"
+  cmake "$src_dir" -DCMAKE_INSTALL_PREFIX="$install_dir" -DCATKIN_DEVEL_PREFIX="$devel_dir" -G"Eclipse CDT4 - Unix Makefiles" &>/dev/null
   if [ $? -eq 0 ]; then
       echo "-- Created eclipse .project file for the '$pkg_name' package at location $pkg_build_dir"
   else
