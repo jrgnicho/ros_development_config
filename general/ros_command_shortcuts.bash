@@ -46,12 +46,10 @@ function __catkin_config_eclipse__()
 function __eclipse_ws_config__() 
 {
   current_dir=`pwd`
-  build_dir=`catkin locate -b`
 
-  for eclipse_proj_path in `find $build_dir -name .project`; do
-      DIR=`dirname $eclipse_proj_path`
-      pkg_name=`dirname $eclipse_proj_path | xargs -n 1 basename`
-
+  packages=`catkin list | sed -e "s/- \(.*\)/\1/g"`
+  for pkg_name in $packages; do
+    echo "Started Eclipse setup for package \"$pkg_name\""
       __eclipse_pkg_config__ $pkg_name
   done
   cd "$current_dir"
@@ -70,7 +68,8 @@ function __eclipse_pkg_config__()
   src_dir=`catkin locate $pkg_name`
 
   # check that src directory exists
-  if [ -z "$src_dir" ]; then
+  if [ ! -d "$src_dir" ]; then
+    echo "-- Source directory $src_dir was not found, skipping package $pkg_name"
     return
   fi
 
@@ -81,13 +80,19 @@ function __eclipse_pkg_config__()
 
   # enter project build directory
   pkg_build_dir="$build_dir/$pkg_name"
+  # check that package build directory exists
+  if [ ! -d "$pkg_build_dir" ]; then
+    echo "-- Build directory $pkg_build_dir was not found, skipping package $pkg_name"
+    return
+  fi
+
   cd "$pkg_build_dir"
 
   cmake "$src_dir" -DCMAKE_INSTALL_PREFIX="$install_dir" -DCATKIN_DEVEL_PREFIX="$devel_dir" -G"Eclipse CDT4 - Unix Makefiles" &>/dev/null
   if [ $? -eq 0 ]; then
       echo "-- Created eclipse .project file for the '$pkg_name' package at location $pkg_build_dir"
   else
-      echo "Failed to create eclipse .project for the '$pkg_name' package" 1>&2
+      echo "-- Failed to create eclipse .project for the '$pkg_name' package" 1>&2
   fi  
 
   # returning to previous directory
