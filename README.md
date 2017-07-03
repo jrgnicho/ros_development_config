@@ -59,3 +59,6 @@ ros_session -l kinetic
   	.
   	.
   ```
+  
+  ### Other features
+  - [Debugging with Eclipse](gdb/README.md)
