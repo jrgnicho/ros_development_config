@@ -15,14 +15,21 @@ function __catkin_build_eclipse__()
 {
 
   if [ "$#" -eq 0 ]; then # build entire workspace
-   catkin build -c
-    __eclipse_ws_config__
+   
+    catkin build --force-cmake -G"Eclipse CDT4 - Unix Makefiles"    
+ 
+    # Lines below currrently break catkin due to some Unicode formatting issue ?
+    #catkin build -c
+    # __eclipse_ws_config__
   else
     for pkg in "$@"
     do
 
-      catkin build -c "$pkg"
-      __eclipse_pkg_config__ $pkg
+    catkin build --force-cmake -G"Eclipse CDT4 - Unix Makefiles" "$pkg"
+
+    # Lines below currrently break catkin due to some Unicode formatting issue ?
+    # catkin build -c "$pkg"
+    # __eclipse_pkg_config__ $pkg
       
     done    
   fi
