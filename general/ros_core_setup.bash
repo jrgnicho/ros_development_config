@@ -54,7 +54,7 @@ fi
 # setting up ros environment variables
 export MAKEFLAGS="-j1"
 export ROS_WORKSPACE="$CATKIN_DIR"
-export ROS_LOCATIONS="catkin_ws=$CATKIN_DIR:rosbuild=$ROSBUILD_DIR:linux_config=$HOME/linux_config"
+export ROS_LOCATIONS="ws=$CATKIN_DIR:rosbuild=$ROSBUILD_DIR:linux_config=$HOME/linux_config"
 export ROSCONSOLE_CONFIG_FILE="$CATKIN_DIR/rosconsole.config"
 export ROS_PARALLEL_JOBS="-j2 -l2"
 export PYTHONPATH="$PYTHONPATH:$CATKIN_DIR/src:$ROSBUILD_DIR"
