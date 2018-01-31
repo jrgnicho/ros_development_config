@@ -59,7 +59,7 @@ export ROSCONSOLE_CONFIG_FILE="$CATKIN_DIR/rosconsole.config"
 export ROS_PARALLEL_JOBS="-j2 -l2"
 export PYTHONPATH="$PYTHONPATH:$CATKIN_DIR/src:$ROSBUILD_DIR"
 export ROSCONSOLE_FORMAT='[${severity}]: ${message};'
-
+alias catkin_ws_source="source $script"
 
 # check directory for optional configuration scripts
 OPTIONAL_CONF_SCRIPT="$LINUX_CONF_PATH/ros/$ROS_DISTRO/setup.bash"
