@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export LINUX_CONF_PATH="$HOME/linux_config"
+export LINUX_CONF_PATH="$HOME/ros_development_config"
 
 source "$LINUX_CONF_PATH/general/install_prerequisites.bash"
 source "$LINUX_CONF_PATH/general/aliases.bash"

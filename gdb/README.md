@@ -49,8 +49,8 @@
     - In the Preferred Launcher window select “GDB (DSF) Attach to Process Launcher” checkbox and click “Apply” and “OK”.
     
 -	Configure GDB Pretty Print :
-    - Clone the “linux_config” package 
-    ```	git clone https://github.com/jrgnicho/linux_config.git ```
+    - Clone the “ros_development_config” package 
+    ```	git clone https://github.com/jrgnicho/ros_development_config.git ```
     - This package contains the “gdbinit” script which will be loaded by Eclipse in order to configure the gdb debugger.
     - For more details about this step see: http://help.eclipse.org/mars/index.jsp?topic=%2Forg.eclipse.cdt.doc.user%2Fconcepts%2Fcdt_c_whatsnew_80.htm
 -	Debug Configurations
@@ -59,7 +59,7 @@
     - In the “Main” tab hit the “Browse” button under “C/C++ Application” and find the executable to be debugged and then click “Apply” and “Debug”; for example point to “/opt/ros/indigo/lib/moveit_ros_move_group/move_group” in order to debug the **move_group** executable.
     - Load the gdbinit file   
       *	Select the Debugger tab and click the “Browse” button next to the “GDB command file” textbox.
-      * Browse to the location of the “~/linux_config/gdb/gdbinit” file downloaded earlier and click “OK”
+      * Browse to the location of the “~/ros_development_config/gdb/gdbinit” file downloaded earlier and click “OK”
 
     - In the “Select Process” window find the process to be debugged, in this example select “move_group” and click “OK”.  It is assumed that the process or program of interest is already running.
 

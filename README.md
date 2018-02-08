@@ -1,22 +1,22 @@
-## linux_config
+## ros_development_config
 Shell scripts for configuring the linux environment for ROS development
 
 #### Setup Instructions
-+  Clone the "linux_config" repository in your home directory by running the following command:  
++  Clone the "ros_development_config" repository in your home directory by running the following command:  
 	```		
 	cd
-	git clone https://github.com/jrgnicho/linux_config.git	
+	git clone https://github.com/jrgnicho/ros_development_config.git	
 	```
 +  Select the branch corresponding to your linux environment, for instance in linux **xenial** do:
 	```
-	cd ~/linux_config
+	cd ~/ros_development_config
 	git checkout xenial
 	```
 
 +  Add the following line to your bash file ".bashrc":
 	
 	```
-	source "$HOME/linux_config/general/setup.bash"
+	source "$HOME/ros_development_config/general/setup.bash"
 	```                 
  + Run your bash file
  	```

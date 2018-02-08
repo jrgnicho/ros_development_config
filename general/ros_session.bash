@@ -220,7 +220,7 @@ function main()
       ROSBUILD_DIR="$HOME/ros/$ROS_DISTRO/rosbuild"
 
       # workspace creation
-      source "$HOME/linux_config/general/ros_create_workspace.bash" $ROS_DISTRO $CATKIN_WS $SELECTED_BUILD_TOOL $ROSBUILD_DIR
+      source "$HOME/ros_development_config/general/ros_create_workspace.bash" $ROS_DISTRO $CATKIN_WS $SELECTED_BUILD_TOOL $ROSBUILD_DIR
       
     else
 		  echo "$(tput setaf 1)Catkin workspace $CATKIN_WS for ros $ROS_DISTRO was not found$(tput sgr0)"
