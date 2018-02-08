@@ -59,6 +59,29 @@ ros_session -l kinetic
   	.
   	.
   ```
+
+### Workspace Context Commands
+The following commands can be used within the context of a catkin workspace:
+
+- Source the workspace from any location
+    ```
+    catkin_ws_source
+    ```
+
+- Build eclipse project file:
+
+    ```
+    catkin_build_eclipse
+    ```
+    This runs ```catkin build``` with some especial arguments to create the eclipse project files.
+    See the "Other Features" section for more info.
+
+- CD into several useful catkin workspace locations:
+  The following ROS locations can be cd'ed with the ```roscd``` command:
+  - src: Catkin workpace source directory
+  - ws:  Catkin workspace top level directory
   
-  ### Other features
+  Therefore, to go the source directory you can enter ```roscd src```
+  
+### Other features
   - [Debugging with Eclipse](gdb/README.md)
