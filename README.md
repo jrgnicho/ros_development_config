@@ -85,3 +85,8 @@ The following commands can be used within the context of a catkin workspace:
   
 ### Other features
   - [Debugging with Eclipse](gdb/README.md)
+
+### Other Useful Tools
+- Eclipse/ROS integration  
+  - [eclipsify](https://github.com/ethz-asl/eclipsify)  
+
