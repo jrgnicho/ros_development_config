@@ -7,7 +7,8 @@ ROS_SYSTEM_PATH="/opt/ros"
 CREATE_NEW_WS=false
 BUILD_TOOLS=("catkin-tools" "catkin_make") #(catkin-tools catkin_make)
 SELECTED_BUILD_TOOL="${BUILD_TOOLS[0]}"
-TERMINAL_CMD="mate-terminal"
+TERMINAL_OPTIONS=("terminator" "mate-terminal")
+TERMINAL_SELECTION="${TERMINAL_OPTIONS[0]}"
 
 SHORT_OPTIONS="r:w:l:p:c::h"
 LONG_OPTIONS="ros-distro:,workspace:,list-workspaces:,profile:,create::,help"
@@ -230,7 +231,35 @@ function main()
 	else
     echo "$(tput setaf 3)Catkin workspace already exists at $CATKIN_WS, skipping creation.$(tput sgr0)"
   fi
+	
+	# launch terminals
+	if ["$TERMINAL_SELECTION" -eq "${TERMINAL_OPTIONS[0]}" ]; then
+		launch_terminator_terminal
+	elif ["$TERMINAL_SELECTION" -eq "${TERMINAL_OPTIONS[1]}" ]; then
+		launch_mate_terminal
+	else
+		launch_terminator_terminal
+	fi
+	
+}
 
+function launch_terminator_terminal()
+{
+	TERMINAL_CMD="terminator"
+	echo >"$LINUX_CONF_PATH/bashrc.tmp"
+	echo "source $LINUX_CONF_PATH/general/ros_core_setup.bash $ROS_DISTRO $CATKIN_WS">>"$LINUX_CONF_PATH/bashrc.tmp"
+	echo "echo -e \"\033]0;ROS-$ROS_DISTRO [$CATKIN_WS]\007\"">>"$LINUX_CONF_PATH/bashrc.tmp" # set title
+	echo "export PS1=\"ROS-$ROS_DISTRO[$CATKIN_WS]: \"&& clear">>"$LINUX_CONF_PATH/bashrc.tmp"
+	echo "echo \"$(tput setaf 3)ROS catkin workspace [$CATKIN_WS] is ready$(tput sgr0)\"">>"$LINUX_CONF_PATH/bashrc.tmp"
+	COMMAND="$TERMINAL_CMD -g $LINUX_CONF_PATH/general/terminator_config -l ros_devel"
+	# the terminator configuration file has been set to execute the "bashrc.temp" script on each new terminal
+	eval $COMMAND & >> /dev/null
+	return 0
+}
+
+function launch_mate_terminal()
+{
+	TERMINAL_CMD="mate-terminal"
 	# construct bash file
 	cp -f ~/.bashrc ${LINUX_CONF_PATH}/bashrc.tmp
 	echo "source $LINUX_CONF_PATH/general/ros_core_setup.bash $ROS_DISTRO $CATKIN_WS">>"$LINUX_CONF_PATH/bashrc.tmp"
@@ -239,6 +268,7 @@ function main()
 	COMMAND="$TERMINAL_CMD --window $TERMINAL_TAB_ARGS $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG"
 
 	eval $COMMAND &
+	return 0
 }
 
 main "$@"
