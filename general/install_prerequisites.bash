@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REQUIRED_PACKAGES=("mate-terminal")
+REQUIRED_PACKAGES=("terminator" "python-catkin-tools")
 
 function check_debian()
 {
