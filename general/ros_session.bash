@@ -246,7 +246,7 @@ function main()
 function launch_terminator_terminal()
 {
 	TERMINAL_CMD="terminator"
-	echo >"$LINUX_CONF_PATH/bashrc.tmp"
+	cp -f ~/.bashrc ${LINUX_CONF_PATH}/bashrc.tmp
 	echo "source $LINUX_CONF_PATH/general/ros_core_setup.bash $ROS_DISTRO $CATKIN_WS">>"$LINUX_CONF_PATH/bashrc.tmp"
 	echo "echo -e \"\033]0;ROS-$ROS_DISTRO [$CATKIN_WS]\007\"">>"$LINUX_CONF_PATH/bashrc.tmp" # set title
 	echo "export PS1=\"ROS-$ROS_DISTRO[$CATKIN_WS]: \"&& clear">>"$LINUX_CONF_PATH/bashrc.tmp"
