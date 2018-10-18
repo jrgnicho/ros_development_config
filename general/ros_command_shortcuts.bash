@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # functions
+############ DEPRECATED  ###################
 function __catkin_make_eclipse__()
 {
   build_flag=$1
@@ -11,6 +12,7 @@ function __catkin_make_eclipse__()
   catkin_make -DCMAKE_BUILD_TYPE=$build_flag --force-cmake -G"Eclipse CDT4 - Unix Makefiles" && awk -f $(rospack find mk)/eclipse.awk build/.project > build/.project_with_env && mv build/.project_with_env build/.project
 }
 
+############ DEPRECATED  ###################
 function __catkin_build_eclipse__()
 {
 
@@ -35,6 +37,7 @@ function __catkin_build_eclipse__()
   fi
 }
 
+############ DEPRECATED  ###################
 function __catkin_config_eclipse__()
 {
   if [ "$#" -eq 0 ]; then # no specific packages then configure entire workspace
@@ -49,6 +52,7 @@ function __catkin_config_eclipse__()
   fi
 }
 
+############ DEPRECATED  ###################
 # generate project files for the entire workspace
 function __eclipse_ws_config__() 
 {
@@ -62,6 +66,7 @@ function __eclipse_ws_config__()
   cd "$current_dir"
 }
 
+############ DEPRECATED  ###################
 # generate .project files for a single package
 function __eclipse_pkg_config__()
 {
@@ -106,6 +111,68 @@ function __eclipse_pkg_config__()
   cd "$current_dir"  
 }
 
+function __check_eclipsify__()
+{
+	rospack find eclipsify > /dev/null 2>&1
+	
+}
+
+function __install_eclipsify__()
+{
+	rospack find eclipsify > /dev/null 2>&1
+	if [ $? -eq 0 ]; then
+		echo "eclipsify is already installed"
+		return
+	else
+		echo "Installing eclipsify"
+	fi
+
+	# capture current path
+	current_path=$(pwd)
+
+	roscd src
+	git clone https://github.com/ethz-asl/eclipsify
+	roscd ws
+	
+	# moving active .rosinstall
+	mkdir src/__temp__dir
+	mv src/.rosinstall src/__temp__dir/.rosinstall > /dev/null 2>&1
+	mv src/.rosinstall.bak src/__temp__dir/.rosinstall.bak > /dev/null 2>&1
+	
+	wstool init src
+	wstool merge -t src src/eclipsify/.rosinstall
+	wstool update -t src
+	catkin build eclipsify
+	
+	#installing python dependencies
+	pip install --user termcolor
+
+	# reinstating active .rosinstall
+	rm src/.rosinstall
+	rm src/.rosinstall.bak
+	mv src/__temp__dir/.rosinstall src/.rosinstall > /dev/null 2>&1
+	mv src/__temp__dir/.rosinstall.bak src/.rosinstall.bak > /dev/null 2>&1
+	rm -r src/__temp__dir/
+
+	# sourcing the workspace
+	source devel/setup.bash
+
+	# return to current path
+	cd $current_path
+}
+
+function __create_eclipse_projects__()
+{
+	rospack find eclipsify > /dev/null 2>&1
+	if [ $? -eq 1 ]; then
+		echo "eclipsify is not installed run: \"install_eclipsify\""
+		return
+	fi
+	roscd ws
+	mkdir projects > /dev/null 2>&1
+	catkin list -u | xargs -I pkg eclipsify pkg -O projects/pkg
+}
+
 function __catkin_build__all__()
 {
   build_flag=$1
@@ -132,5 +199,7 @@ function __catkin_build__pkg__()
 alias catkin_config_eclipse='__catkin_config_eclipse__'
 alias catkin_make_eclipse='__catkin_make_eclipse__'
 alias catkin_build_eclipse='__catkin_build_eclipse__'
+alias install_eclipsify='__install_eclipsify__'
+alias create_eclipse_projects='__create_eclipse_projects__'
 alias cb='__catkin_build__all__'
 alias cbpkg='__catkin_build__pkg__' 
