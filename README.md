@@ -32,19 +32,12 @@ Shell scripts for configuring the linux environment for ROS development
 +  If a catkin workspace already exist then just run the following to bring up the terminals configured to the existing workspace:
 	```
 	ros_session kinetic my_catkin_workspace
-	```
-            
-+  Also, pass the name of an existing terminal profile to bring up the terminals with that profile
-
-	```
-	ros_session kinetic my_catkin_workspace profile1
-	```	        
-           
+	```               
             
 + If another ros released is installed on the local machine such as **groovy**, then run:
 
 	```
-	ros_session groovy my_catkin_workspace profile1
+	ros_session groovy my_catkin_workspace
 	```
 ### List current catkin workspaces
 +  In a terminal run the following command to list the current workspaces:
@@ -67,21 +60,35 @@ The following commands can be used within the context of a catkin workspace:
     ```
     catkin_ws_source
     ```
-
-- Build eclipse project file:
-
+    
+- Install [eclipsify](https://github.com/ethz-asl/eclipsify)  
     ```
-    catkin_build_eclipse
+    install_eclipsify
     ```
-    This runs ```catkin build``` with some especial arguments to create the eclipse project files.
-    See the "Other Features" section for more info.
+    This will download the eclipsify repository into your workspace.  You can then create eclipse projects for your packages by calling the following command:
+    ```
+    create_eclipse_projects
+    ```
+    This creates a `projects` directory in your workspace.  Then in the "Eclipse" IDE you can import as an "Existing Project Into Workspace" by browsing to this `projects` directory and selecting you ros packages.
+    
+	
 
 - CD into several useful catkin workspace locations:
   The following ROS locations can be cd'ed with the ```roscd``` command:
   - src: Catkin workpace source directory
   - ws:  Catkin workspace top level directory
   
-  Therefore, to go the source directory you can enter ```roscd src```
+  For instance:
+    ```
+    roscd ws
+    ```
+    Goes to the top level directory of your catkin workspace and
+    
+    ```
+    roscd src
+    ```
+    Goes to the `src` directory of the catkin workspace
+  
   
 ### Other features
   - [Debugging with Eclipse](gdb/README.md)
