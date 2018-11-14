@@ -196,9 +196,9 @@ function __catkin_build__pkg__()
 }
 
 ### command alias list
-alias catkin_config_eclipse='__catkin_config_eclipse__'
-alias catkin_make_eclipse='__catkin_make_eclipse__'
-alias catkin_build_eclipse='__catkin_build_eclipse__'
+#alias catkin_config_eclipse='__catkin_config_eclipse__'
+#alias catkin_make_eclipse='__catkin_make_eclipse__'
+#alias catkin_build_eclipse='__catkin_build_eclipse__'
 alias install_eclipsify='__install_eclipsify__'
 alias create_eclipse_projects='__create_eclipse_projects__'
 alias cb='__catkin_build__all__'
