@@ -103,7 +103,7 @@ function list_catkin_workspaces()
 	a=$(get_workspace_list $ros_distro)
 
 	for i in ${a[@]}; do
-		echo "ros catkin workspace: $i"
+		echo "$i"
 	done
 
 	return 0
@@ -139,7 +139,8 @@ function main()
 
 			-l|--list-workspaces)
 
-				if(! list_catkin_workspaces $OPTARG); then
+        ROS_DISTRO=$OPTARG        
+				if(! list_catkin_workspaces $ROS_DISTRO); then
 					echo "ros $2 has no catkin workspaces"
 					exit 1
 				else
