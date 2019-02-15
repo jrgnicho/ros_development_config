@@ -33,26 +33,35 @@ function get_workspace_list()
 _ros_session_()
 {
   # creating list of workspaces
-  local word=${COMP_WORDS[COMP_CWORD]}
+  local candidate_word=${COMP_WORDS[COMP_CWORD]}
   ros_distros=$(ls /opt/ros/)
 
   if [ $COMP_CWORD -eq 1 ]; then 
     # check for option    
     
-    first_char=$(echo $word | cut -c1)
+    first_char=$(echo $candidate_word | cut -c1)
     if [ "$first_char" = "-" ]; then
       # using option so do nothing
       # TODO change this so that the option is entered after the ros distro name
-      return
+      return        
+    else
+      COMPREPLY=($(compgen -W "${ros_distros}" ${candidate_word}))
     fi
-    COMPREPLY=($(compgen -W "${ros_distros}" ${word}))
 
     
   elif [ $COMP_CWORD -gt 1 ]; then
-    local index=$(($COMP_CWORD-1))
-    ros_distro=${COMP_WORDS[index]}
+    
+    local prev_index=$(($COMP_CWORD-1))
+    local prev_entry=${COMP_WORDS[prev_index]}
+    
+    if [ "$prev_entry" = "-l" ]; then      
+      COMPREPLY=($(compgen -W "${ros_distros}" ${candidate_word}))
+      return 
+    fi
+
+    ros_distro=${prev_entry}
     workspaces=$(get_workspace_list ${ros_distro})
-    COMPREPLY=($(compgen -W "${workspaces}" ${word}))
+    COMPREPLY=($(compgen -W "${workspaces}" ${candidate_word}))
   fi
 
 }
