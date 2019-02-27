@@ -228,15 +228,12 @@ function main()
 		  echo "$(tput setaf 1)Catkin workspace $CATKIN_WS for ros $ROS_DISTRO was not found$(tput sgr0)"
 		  exit 1
     fi
-
-	else
-    echo "$(tput setaf 3)Catkin workspace already exists at $CATKIN_WS, skipping creation.$(tput sgr0)"
   fi
 	
 	# launch terminals
-	if ["$TERMINAL_SELECTION" -eq "${TERMINAL_OPTIONS[0]}" ]; then
+	if [ "$TERMINAL_SELECTION" == "${TERMINAL_OPTIONS[0]}" ]; then
 		launch_terminator_terminal
-	elif ["$TERMINAL_SELECTION" -eq "${TERMINAL_OPTIONS[1]}" ]; then
+	elif [ "$TERMINAL_SELECTION" == "${TERMINAL_OPTIONS[1]}" ]; then
 		launch_mate_terminal
 	else
 		launch_terminator_terminal
