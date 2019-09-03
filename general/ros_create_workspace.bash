@@ -6,6 +6,7 @@ ROS_DISTRO=""
 ROSBUILD_DIR=""
 CATKIN_DIR=""
 ROS_SETUP_SCRIPT="/opt/ros/$ROS_DISTRO/setup.bash"
+CLANG_FORMAT_FILE="$HOME/ros_development_config/eclipse/formatters/.clang-format"
 
 function catkin_make_setup()
 {
@@ -79,13 +80,21 @@ else
   echo "$(tput setaf 1)Invalid build tool $SELECTED_BUILD_TOOL selected, exiting$(tput sgr0)" 
 fi
 
-
+### Copying files to workspace
 # copying ros console config file
 if [ ! -f "$CATKIN_DIR/rosconsole.config" ]; then
   # copying default rosconsole config to workspace
-  echo "$(tput setaf 3)Copied default rosconsole.config to workspace directory$(tput sgr0)"
   cp "$ROS_ROOT/config/rosconsole.config" "$CATKIN_DIR"
+  echo "$(tput setaf 3)Copied default rosconsole.config to workspace directory$(tput sgr0)"
 fi
+
+# copying ros console config file
+if [ ! -f "$CATKIN_DIR/.clang-format" ]; then
+  # copying default .clang-format to workspace
+  cp "$CLANG_FORMAT_FILE" "$CATKIN_DIR"
+  echo "$(tput setaf 3)Copied default .clang-format to workspace directory$(tput sgr0)"
+fi
+
 
 cd $HOME
 }
