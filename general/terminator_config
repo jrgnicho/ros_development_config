@@ -1,24 +1,10 @@
 [global_config]
   enabled_plugins = TerminalShot, LaunchpadCodeURLHandler, APTURLHandler
+  title_hide_sizetext = True
+  window_state = hidden
 [keybindings]
   broadcast_all = <Alt>b
   broadcast_off = <Alt>n
-[profiles]
-  [[default]]
-    background_image = None
-  [[alpha]]
-    background_image = None
-  [[rosdevel]]
-    palette = "#000000:#cd0000:#00cd00:#cdcd00:#0000ee:#cd00cd:#00cdcd:#e5e5e5:#7f7f7f:#ff0000:#00ff00:#ffff00:#5c5cff:#ff00ff:#00ffff:#ffffff"
-    background_image = None
-    custom_command = exec bash --rcfile ~/ros_development_config/bashrc.tmp
-    scrollback_lines = 5000
-    use_system_font = False
-    foreground_color = "#ffffff"
-    use_custom_command = True
-    font = Monospace 12
-    background_color = "#18167b"
-    scrollback_infinite = True
 [layouts]
   [[default]]
     [[[child1]]]
@@ -167,3 +153,25 @@
       type = Terminal
       uuid = 5b34a71f-343f-40ed-a86b-4aaf84351a72
 [plugins]
+[profiles]
+  [[default]]
+    cursor_color = "#aaaaaa"
+  [[alpha]]
+  [[rosdevel]]
+    background_color = "#18167b"
+    cursor_color = "#ffffff"
+    custom_command = exec bash --rcfile ~/ros_development_config/bashrc.tmp
+    font = Monospace 12
+    foreground_color = "#ffffff"
+    palette = "#000000:#cd0000:#00cd00:#cdcd00:#0000ee:#cd00cd:#00cdcd:#e5e5e5:#7f7f7f:#ff0000:#00ff00:#ffff00:#5c5cff:#ff00ff:#00ffff:#ffffff"
+    scrollback_infinite = True
+    scrollback_lines = 5000
+    use_custom_command = True
+    use_system_font = False
+  [[ssh]]
+    background_color = "#5fc656"
+    cursor_color = "#000000"
+    font = Monospace 10
+    foreground_color = "#000000"
+    login_shell = True
+    use_system_font = False
