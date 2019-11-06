@@ -168,3 +168,10 @@
     scrollback_lines = 5000
     use_custom_command = True
     use_system_font = False
+  [[ssh]]
+    background_color = "#5fc656"
+    cursor_color = "#000000"
+    font = Monospace 10
+    foreground_color = "#000000"
+    login_shell = True
+    use_system_font = False
