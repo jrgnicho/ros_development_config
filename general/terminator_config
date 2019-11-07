@@ -1,6 +1,5 @@
 [global_config]
   enabled_plugins = TerminalShot, LaunchpadCodeURLHandler, APTURLHandler
-  window_state = hidden
 [keybindings]
   broadcast_all = <Alt>b
 [layouts]
