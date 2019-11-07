@@ -27,6 +27,7 @@ function launch_terminator_terminal()
 	TERMINAL_CMD="terminator"
   SSH_COMMAND="ssh -X $FULL_ID"
   cp -f ~/.bashrc ${LINUX_CONF_PATH}/bashrc.tmp
+  echo  "setterm --term linux --background yellow --foreground black --clear all --half-bright off" >>"$LINUX_CONF_PATH/bashrc.tmp"
   echo  "$SSH_COMMAND" >>"$LINUX_CONF_PATH/bashrc.tmp"
 	COMMAND="$TERMINAL_CMD -g $LINUX_CONF_PATH/general/terminator_config -l ros_devel --title=ssh:$FULL_ID "
 	# the terminator configuration file has been set to execute the "bashrc.temp" script on each new terminal
