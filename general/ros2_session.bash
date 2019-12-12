@@ -239,7 +239,7 @@ function launch_terminator_terminal()
 	echo "echo -e \"\033]0;ROS-$ROS2_DISTRO [$ROS2_WS]\007\"">>"$LINUX_CONF_PATH/bashrc.tmp" # set title
 	echo "export PS1=\"ROS-$ROS2_DISTRO[$ROS2_WS]: \"&& clear">>"$LINUX_CONF_PATH/bashrc.tmp"
 	echo "echo \"$(tput setaf 3)ROS2 workspace [$ROS2_WS] is ready$(tput sgr0)\"">>"$LINUX_CONF_PATH/bashrc.tmp"
-	COMMAND="$TERMINAL_CMD -g $LINUX_CONF_PATH/general/terminator_config -l ros_devel"
+	COMMAND="$TERMINAL_CMD -g $LINUX_CONF_PATH/general/terminator_config -l ros2_devel"
 	# the terminator configuration file has been set to execute the "bashrc.temp" script on each new terminal
 	eval $COMMAND & >> /dev/null
 	return 0
