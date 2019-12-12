@@ -39,7 +39,7 @@ function main()
 	fi
 	
 	# set ros workspace paths
-	ROS2_WS_DIR="$HOME/ros/$ROS_DISTRO/$2"
+	ROS2_WS_DIR="$HOME/ros2/$ROS_DISTRO/$2"
 	
 	#create ros2 ws
 	SELECTED_BUILD_TOOL=$3
