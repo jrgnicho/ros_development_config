@@ -11,6 +11,144 @@
     [[[window0]]]
       parent = ""
       type = Window
+  [[ros2_devel]]
+    [[[child0]]]
+      fullscreen = False
+      last_active_window = True
+      maximised = True
+      order = 0
+      parent = ""
+      position = 1985:24
+      size = 1855, 1176
+      title = ROS devel
+      type = Window
+    [[[child1]]]
+      active_page = 0
+      labels = None, None, None, None
+      last_active_term = 33329854-da22-4dbc-b814-eabd01309a09, 5b34a71f-343f-40ed-a86b-4aaf84351a72, c64e0974-27c5-44cb-b602-c6e4b13383d2, eef98a1a-c10c-4ad0-bf81-3b697d6767f7
+      order = 0
+      parent = child0
+      type = Notebook
+    [[[child12]]]
+      order = 2
+      parent = child1
+      position = 571
+      ratio = 0.5
+      type = VPaned
+    [[[child13]]]
+      order = 0
+      parent = child12
+      position = 920
+      ratio = 0.497574123989
+      type = HPaned
+    [[[child17]]]
+      order = 3
+      parent = child1
+      position = 571
+      ratio = 0.5
+      type = VPaned
+    [[[child18]]]
+      order = 0
+      parent = child17
+      position = 924
+      ratio = 0.499730458221
+      type = HPaned
+    [[[child2]]]
+      order = 0
+      parent = child1
+      position = 538
+      ratio = 0.471254355401
+      type = VPaned
+    [[[child3]]]
+      order = 0
+      parent = child2
+      position = 920
+      ratio = 0.497574123989
+      type = HPaned
+    [[[child7]]]
+      order = 1
+      parent = child1
+      position = 571
+      ratio = 0.5
+      type = VPaned
+    [[[child8]]]
+      order = 0
+      parent = child7
+      position = 920
+      ratio = 0.497574123989
+      type = HPaned
+    [[[terminal10]]]
+      order = 1
+      parent = child8
+      profile = ros2-devel
+      type = Terminal
+      uuid = 15ba37bc-f72c-4b83-9112-71cb4b64e9ee
+    [[[terminal11]]]
+      order = 1
+      parent = child7
+      profile = ros2-devel
+      type = Terminal
+      uuid = a969ef1b-9f8b-493a-bf29-cda8eeb5a93e
+    [[[terminal14]]]
+      order = 0
+      parent = child13
+      profile = ros2-devel
+      type = Terminal
+      uuid = c64e0974-27c5-44cb-b602-c6e4b13383d2
+    [[[terminal15]]]
+      order = 1
+      parent = child13
+      profile = ros2-devel
+      type = Terminal
+      uuid = 28df4964-b647-4c55-ad6b-7ea03a1b9acc
+    [[[terminal16]]]
+      order = 1
+      parent = child12
+      profile = ros2-devel
+      type = Terminal
+      uuid = 8e1c7a78-100c-4bc0-a57a-0d34f95a92d1
+    [[[terminal19]]]
+      order = 0
+      parent = child18
+      profile = ros2-devel
+      type = Terminal
+      uuid = eef98a1a-c10c-4ad0-bf81-3b697d6767f7
+    [[[terminal20]]]
+      order = 1
+      parent = child18
+      profile = ros2-devel
+      type = Terminal
+      uuid = 67eb85be-a0c6-4cd8-bebc-5c836b6f385e
+    [[[terminal21]]]
+      order = 1
+      parent = child17
+      profile = ros2-devel
+      type = Terminal
+      uuid = 56d245b2-0021-4943-8458-dbacab13ef88
+    [[[terminal4]]]
+      order = 0
+      parent = child3
+      profile = ros2-devel
+      type = Terminal
+      uuid = 33329854-da22-4dbc-b814-eabd01309a09
+    [[[terminal5]]]
+      order = 1
+      parent = child3
+      profile = ros2-devel
+      type = Terminal
+      uuid = 15d18c8c-0c10-457f-b359-27346a813eb8
+    [[[terminal6]]]
+      order = 1
+      parent = child2
+      profile = ros2-devel
+      type = Terminal
+      uuid = 0a136263-0b4d-4147-8906-6c81f0ccba6d
+    [[[terminal9]]]
+      order = 0
+      parent = child8
+      profile = ros2-devel
+      type = Terminal
+      uuid = 5b34a71f-343f-40ed-a86b-4aaf84351a72
   [[ros_devel]]
     [[[child0]]]
       fullscreen = False
@@ -153,14 +291,23 @@
 [profiles]
   [[default]]
     cursor_color = "#aaaaaa"
-  [[alpha]]
-    cursor_color = "#aaaaaa"
-  [[ros-development]]
-    cursor_color = "#aaaaaa"
+  [[ros2-devel]]
+    background_color = "#ffffdd"
+    cursor_color = "#ffffff"
+    custom_command = exec bash --rcfile ~/ros_development_config/bashrc.tmp
+    exit_action = hold
+    font = Monospace 12
+    foreground_color = "#000000"
+    palette = "#000000:#cd0000:#00cd00:#cdcd00:#0000ee:#cd00cd:#00cdcd:#e5e5e5:#7f7f7f:#ff0000:#00ff00:#ffff00:#5c5cff:#ff00ff:#00ffff:#ffffff"
+    scrollback_infinite = True
+    scrollback_lines = 5000
+    use_custom_command = True
+    use_system_font = False
   [[rosdevel]]
     background_color = "#18167b"
     cursor_color = "#ffffff"
     custom_command = exec bash --rcfile ~/ros_development_config/bashrc.tmp
+    exit_action = hold
     font = Monospace 12
     foreground_color = "#ffffff"
     palette = "#000000:#cd0000:#00cd00:#cdcd00:#0000ee:#cd00cd:#00cdcd:#e5e5e5:#7f7f7f:#ff0000:#00ff00:#ffff00:#5c5cff:#ff00ff:#00ffff:#ffffff"
