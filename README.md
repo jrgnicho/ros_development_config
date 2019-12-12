@@ -10,7 +10,6 @@ Shell scripts for configuring the linux environment for ROS development
 +  Select the branch corresponding to your linux environment, for instance in linux **xenial** do:
 	```
 	cd ~/ros_development_config
-	git checkout xenial
 	```
 
 +  Add the following line to your bash file ".bashrc":
