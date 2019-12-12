@@ -250,7 +250,7 @@ function launch_mate_terminal()
 	TERMINAL_CMD="mate-terminal"
 	# construct bash file
 	cp -f ~/.bashrc ${LINUX_CONF_PATH}/bashrc.tmp
-	echo "source $LINUX_CONF_PATH/general/ros_core_setup.bash $ROS2_DISTRO $ROS2_WS">>"$LINUX_CONF_PATH/bashrc.tmp"
+	echo "source $LINUX_CONF_PATH/general/ros2_env_setup.bash $ROS2_DISTRO $ROS2_WS">>"$LINUX_CONF_PATH/bashrc.tmp"
   TERMINAL_TAB_ARGS="--title='ros-$ROS2_DISTRO: $ROS2_WS' --profile=$PROFILE --command='bash --rcfile $LINUX_CONF_PATH/bashrc.tmp'"
 	NEW_TAB_ARG="--tab $TERMINAL_TAB_ARGS"
 	COMMAND="$TERMINAL_CMD --window $TERMINAL_TAB_ARGS $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG"

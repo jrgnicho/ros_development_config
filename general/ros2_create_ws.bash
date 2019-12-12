@@ -30,7 +30,7 @@ function main()
 		ROS_DISTRO=$1
 	fi 
 	
-	ROS_SETUP_SCRIPT="/opt/ros2/$ROS_DISTRO/setup.bash"
+	ROS_SETUP_SCRIPT="/opt/ros/$ROS_DISTRO/setup.bash"
 	if [ -f $ROS_SETUP_SCRIPT ]; then
 	  source "$ROS_SETUP_SCRIPT"
 	else
