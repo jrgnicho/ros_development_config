@@ -208,27 +208,27 @@ function main()
 	fi
 
 	# check catkin workspace
-	if(! check_catkin_workspace_exists $CATKIN_WS $ROS_DISTRO); then
+	if (! check_catkin_workspace_exists $CATKIN_WS $ROS_DISTRO); then
 
-    if $CREATE_NEW_WS ; then
-
-      # checking that required variables have been set
-      if [ "$ROS_DISTRO" == "" ] ; then
-        echo "$(tput setaf 1)ROS distribution has not been set; recommended use:$(tput sgr0)"
-        echo "$(tput setaf 1)ros_session -c [ros-distro] [catkin_ws]:$(tput sgr0)"
-        exit 1
-      fi
-
-      ROSBUILD_DIR="$HOME/ros/$ROS_DISTRO/rosbuild"
-
-      # workspace creation
-      source "$HOME/ros_development_config/general/ros_create_workspace.bash" $ROS_DISTRO $CATKIN_WS $SELECTED_BUILD_TOOL $ROSBUILD_DIR
-      
-    else
-		  echo "$(tput setaf 1)Catkin workspace $CATKIN_WS for ros $ROS_DISTRO was not found$(tput sgr0)"
-		  exit 1
-    fi
-  fi
+	    if $CREATE_NEW_WS ; then
+	
+	      # checking that required variables have been set
+	      if [ "$ROS_DISTRO" == "" ] ; then
+	        echo "$(tput setaf 1)ROS distribution has not been set; recommended use:$(tput sgr0)"
+	        echo "$(tput setaf 1)ros_session -c [ros-distro] [catkin_ws]:$(tput sgr0)"
+	        exit 1
+	      fi
+	
+	      ROSBUILD_DIR="$HOME/ros/$ROS_DISTRO/rosbuild"
+	
+	      # workspace creation
+	      source "$HOME/ros_development_config/general/ros_create_workspace.bash" $ROS_DISTRO $CATKIN_WS $SELECTED_BUILD_TOOL $ROSBUILD_DIR
+	      
+	    else
+			  echo "$(tput setaf 1)Catkin workspace $CATKIN_WS for ros $ROS_DISTRO was not found$(tput sgr0)"
+			  exit 1
+	    fi
+  	fi
 	
 	# launch terminals
 	if [ "$TERMINAL_SELECTION" == "${TERMINAL_OPTIONS[0]}" ]; then
