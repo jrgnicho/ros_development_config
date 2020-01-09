@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import os
 import sys
+import subprocess
 
 HOME_VAR = 'HOME'
 COLCON_VAR = 'COLCON_PREFIX_PATH'
@@ -9,6 +10,7 @@ ROS_DEVEL_CONFIG_PATH = os.path.join(os.path.expandvars('$HOME'), os.path.basena
 WS_INSTALL_DIR_NAME = 'install'
 WS_ECLIPSE_PROJECTS_DIR_NAME = 'projects'
 WS_SRC_DIR_NAME = 'src'
+WS_INSTALL_DIR_NAME = 'install'
 
 ECLIPSE_TEMPLATE_PATH = os.path.join(ROS_DEVEL_CONFIG_PATH , 'eclipse' ,'project_templates')
 ECLIPSE_CPROJECT_FILE = '.cproject'
@@ -18,6 +20,7 @@ ECLIPSE_LANG_SETTINGS_FILE = os.path.join('.settings','language.settings.xml')
 ECLIPSE_PROJECT_NAME_TOKEN = '${ProjName}'
 ECLIPSE_PROJECT_PATH_TOKEN = '${ProjPath}'
 ECLIPSE_WS_PATH_TOKEN = '${WorkspacePath}'
+ECLIPSE_WS_INSTALL_PATH_TOKEN = '${WSInstallPath}'
 
 if __name__ == '__main__':
     
@@ -47,14 +50,30 @@ if __name__ == '__main__':
     if not os.path.exists(WS_ECLIPSE_PROJECTS_PATH):
         os.mkdir(WS_ECLIPSE_PROJECTS_PATH)
         print('Created Eclipse projects directory at %s' % (WS_ECLIPSE_PROJECTS_PATH))
+
+    # obtaining project path
+    colcon_pkg_path=''
+    try:
+      cmd1 = 'cd %s'%(CURRENT_COLCON_WS)
+      cmd2 = 'colcon info --packages-select %s| grep path'%(colcon_pkg)
+      process = subprocess.run(cmd1 +' && ' + cmd2, shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True)
+      colcon_pkg_path = process.stdout.split('\n')[0].split(' ')[1]
+    except subprocess.CalledProcessError as e:
+      print(e.output)
+      sys.exit(-1)
+
+    # check package path existence
+    if not os.path.exists(colcon_pkg_path):
+        print('package path %s does not exists'%(colcon_pkg_path))
+        sys.exit(-1)
         
     # creating eclipse project files
     eclipse_files = [ECLIPSE_CPROJECT_FILE, ECLIPSE_PROJECT_FILE,ECLIPSE_LANG_SETTINGS_FILE]
     subs_tokens = {}
     subs_tokens[ECLIPSE_PROJECT_NAME_TOKEN] = colcon_pkg
-    subs_tokens[ECLIPSE_PROJECT_PATH_TOKEN] = os.path.join(CURRENT_COLCON_WS,WS_SRC_DIR_NAME,
-                                                           colcon_pkg)
+    subs_tokens[ECLIPSE_PROJECT_PATH_TOKEN] = colcon_pkg_path
     subs_tokens[ECLIPSE_WS_PATH_TOKEN] = CURRENT_COLCON_WS
+    subs_tokens[ECLIPSE_WS_INSTALL_PATH_TOKEN] = os.path.join(CURRENT_COLCON_WS, WS_INSTALL_DIR_NAME)
     
         # Read in the file
     for fpath in eclipse_files:
@@ -72,9 +91,10 @@ if __name__ == '__main__':
         parent_path = os.path.dirname(out_file_path)
         if parent_path != WS_ECLIPSE_PROJECTS_PATH:
             try:
-                os.makedirs(parent_path)
+                os.makedirs(parent_path,  exist_ok=True)
             except OSError:
-                print ("Creation of the directory %s failed" % parent_path)                
+                print ("Creation of the directory %s failed" % parent_path)
+                sys.exit(-1)                
         
         # writing package specific file to project directory
         with open(out_file_path, 'w') as out_f:

@@ -30,6 +30,21 @@
 			<type>2</type>
 			<location>${ProjPath}</location>
 		</link>
+		<!--<link>
+			<name>local_include</name>
+			<type>2</type>
+			<location>/usr/local/include</location>
+		</link>
+		<link>
+			<name>system_include</name>
+			<type>2</type>
+			<location>/usr/include</location>
+		</link>
+		<link>
+			<name>ws_install</name>
+			<type>2</type>
+			<location>${WSInstallPath}</location>
+		</link>--->
 	</linkedResources>
 </projectDescription>
 
