@@ -5,12 +5,14 @@ import subprocess
 
 HOME_VAR = 'HOME'
 COLCON_VAR = 'COLCON_PREFIX_PATH'
+ROS_DISTRO_VAR = 'ROS_DISTRO'
 ROS_DEVEL_CONFIG_PATH = os.path.join(os.path.expandvars('$HOME'), os.path.basename('ros_development_config'))
 
 WS_INSTALL_DIR_NAME = 'install'
 WS_ECLIPSE_PROJECTS_DIR_NAME = 'projects'
 WS_SRC_DIR_NAME = 'src'
 WS_INSTALL_DIR_NAME = 'install'
+ROS_DISTRO_PATH_TEMPLATE = '/opt/ros/ROS_DISTRO'
 
 ECLIPSE_TEMPLATE_PATH = os.path.join(ROS_DEVEL_CONFIG_PATH , 'eclipse' ,'project_templates')
 ECLIPSE_CPROJECT_FILE = '.cproject'
@@ -21,6 +23,7 @@ ECLIPSE_PROJECT_NAME_TOKEN = '${ProjName}'
 ECLIPSE_PROJECT_PATH_TOKEN = '${ProjPath}'
 ECLIPSE_WS_PATH_TOKEN = '${WorkspacePath}'
 ECLIPSE_WS_INSTALL_PATH_TOKEN = '${WSInstallPath}'
+ECLIPSE_ROS_DISTRO_PATH_TOKEN ='${ROSDistroPath}'
 
 if __name__ == '__main__':
     
@@ -29,7 +32,8 @@ if __name__ == '__main__':
         sys.exit(-1)
         
     colcon_pkg = sys.argv[1]
-
+    
+    # get colcon env info
     CURRENT_COLCON_WS = ''
     WS_ECLIPSE_PROJECTS_PATH = ''
     if COLCON_VAR not in os.environ :
@@ -39,6 +43,12 @@ if __name__ == '__main__':
     CURRENT_COLCON_WS = os.environ[COLCON_VAR]
     CURRENT_COLCON_WS = CURRENT_COLCON_WS.replace('/' + WS_INSTALL_DIR_NAME, '')
     WS_ECLIPSE_PROJECTS_PATH = os.path.join(CURRENT_COLCON_WS, WS_ECLIPSE_PROJECTS_DIR_NAME)
+
+    # get ros distro
+    if ROS_DISTRO_VAR not in os.environ :
+        print('%s env var was not found'%(ROS_DISTRO_VAR))
+        sys.exit(-1)
+    ROS_DISTRO_PATH = ROS_DISTRO_PATH_TEMPLATE.replace('ROS_DISTRO',os.environ[ROS_DISTRO_VAR])
     
     # checking paths
     if not os.path.exists(CURRENT_COLCON_WS):
@@ -74,6 +84,7 @@ if __name__ == '__main__':
     subs_tokens[ECLIPSE_PROJECT_PATH_TOKEN] = colcon_pkg_path
     subs_tokens[ECLIPSE_WS_PATH_TOKEN] = CURRENT_COLCON_WS
     subs_tokens[ECLIPSE_WS_INSTALL_PATH_TOKEN] = os.path.join(CURRENT_COLCON_WS, WS_INSTALL_DIR_NAME)
+    subs_tokens[ECLIPSE_ROS_DISTRO_PATH_TOKEN] = ROS_DISTRO_PATH
     
         # Read in the file
     for fpath in eclipse_files:
