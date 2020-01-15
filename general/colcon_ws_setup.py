@@ -88,7 +88,7 @@ if __name__ == '__main__':
 
     # get path to current colcon workspace
     if COLCON_VAR not in os.environ:
-        print('The env variable %s has not been set' % (COLCON_VA))
+        print('The env variable %s has not been set' % (COLCON_VAR))
         sys.exit(-1)
 
     colcon_install_path = os.environ[COLCON_VAR]
