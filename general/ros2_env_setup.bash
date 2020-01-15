@@ -24,11 +24,18 @@ if [ ! -d "$ROS2WS_DIR" ]; then
 	exit -1
 fi
 
+# check colcon home
+COLCON_HOME="$ROS2WS_DIR/.colcon"
+if [ ! -d "$COLCON_HOME" ]; then
+  mkdir -p $COLCON_HOME
+fi
+
 # ros system setup script
 source "/opt/ros/$ROS2_DISTRO/setup.bash"
 
 # ros2 workspace setup script (default)
-ROS2WS_SOURCE_SCRIPT="$ROS2WS_DIR/install/local_setup.bash"
+ROS2WS_SOURCE_SCRIPT="$ROS2WS_DIR/install/setup.bash"
+COLCON_SETUP_SCRIPT="$LINUX_CONF_PATH/general/colcon_ws_setup.py"
 
 
 if [ -f "$ROS2WS_SOURCE_SCRIPT" ]; then
@@ -40,15 +47,10 @@ fi
 # rosbuild workspace setup
 USER_LIBRARY_PATH="$HOME/ros/$ROS2_DISTRO/rosbuild"
 
-# setting up ros environment variables
-export MAKEFLAGS="-j1"
-export ROS_WORKSPACE="$ROS2WS_DIR"
-export ROS_LOCATIONS="ws=$ROS2WS_DIR:src=$ROS2WS_DIR/src:ros_development_config=$HOME/ros_development_config"
-export ROSCONSOLE_CONFIG_FILE="$ROS2WS_DIR/rosconsole.config"
-export ROS_PARALLEL_JOBS="-j2 -l2"
-export PYTHONPATH="$PYTHONPATH:$ROS2WS_DIR/src"
-export ROSCONSOLE_FORMAT='[${severity}]: ${message};'
-alias ros2ws_source="source $ROS2WS_SOURCE_SCRIPT"
+# setting up ros environment variables and aliases
+export COLCON_HOME="$COLCON_HOME"
+alias ros2ws_source=". $ROS2WS_SOURCE_SCRIPT"
+alias colcon_ws_setup="python3 $COLCON_SETUP_SCRIPT"
 
 # check directory for optional configuration scripts
 OPTIONAL_CONF_SCRIPT="$LINUX_CONF_PATH/ros/$ROS2_DISTRO/setup.bash"
