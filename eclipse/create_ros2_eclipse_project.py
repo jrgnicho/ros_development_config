@@ -72,10 +72,13 @@ if __name__ == '__main__':
       print(e.output)
       sys.exit(-1)
 
+    if not os.path.isabs(colcon_pkg_path):
+        colcon_pkg_path = os.path.join(CURRENT_COLCON_WS, colcon_pkg_path)
+
     # check package path existence
     if not os.path.exists(colcon_pkg_path):
         print('package path %s does not exists'%(colcon_pkg_path))
-        sys.exit(-1)
+        sys.exit(-1)    
         
     # creating eclipse project files
     eclipse_files = [ECLIPSE_CPROJECT_FILE, ECLIPSE_PROJECT_FILE,ECLIPSE_LANG_SETTINGS_FILE]

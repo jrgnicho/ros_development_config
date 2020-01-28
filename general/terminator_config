@@ -291,13 +291,16 @@
 [profiles]
   [[default]]
     cursor_color = "#aaaaaa"
+  [[alpha]]
+    cursor_color = "#aaaaaa"
+  [[ros-development]]
+    cursor_color = "#aaaaaa"
   [[ros2-devel]]
-    background_color = "#ffffdd"
     cursor_color = "#ffffff"
     custom_command = exec bash --rcfile ~/ros_development_config/bashrc.tmp
     exit_action = hold
     font = Monospace 12
-    foreground_color = "#000000"
+    foreground_color = "#00ff00"
     palette = "#000000:#cd0000:#00cd00:#cdcd00:#0000ee:#cd00cd:#00cdcd:#e5e5e5:#7f7f7f:#ff0000:#00ff00:#ffff00:#5c5cff:#ff00ff:#00ffff:#ffffff"
     scrollback_infinite = True
     scrollback_lines = 5000
