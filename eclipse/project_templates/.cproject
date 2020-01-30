@@ -25,17 +25,17 @@
 								<option id="gnu.cpp.compiler.option.preprocessor.def.1443765429" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="__GXX_EXPERIMENTAL_CXX0X__"/>
 								</option>
-                <option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.cpp.compiler.option.include.paths.1247373578" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="true" valueType="includePath">
-                                    
-                                    <listOptionValue builtIn="false" value="${WorkspacePath}/install"/> 
-
-                                    <listOptionValue builtIn="false" value="${WorkspacePath}/src"/>	
+                <option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.cpp.compiler.option.include.paths.1247373578" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="true" valueType="includePath">      
 								
-                                    <listOptionValue builtIn="false" value="${ROSDistroPath}/include"/>
+                                    <listOptionValue builtIn="true" value="${ROSDistroPath}/include"/>
                                     									
-                                    <listOptionValue builtIn="false" value="/usr/local/include"/>
+                                    <listOptionValue builtIn="true" value="/usr/local/include"/>
 
-                                    <listOptionValue builtIn="false" value="/usr/include"/>                                     
+                                    <listOptionValue builtIn="true" value="/usr/include"/>
+                              
+                                    <listOptionValue builtIn="true" value="${WorkspacePath}/install"/> 
+
+                                    <listOptionValue builtIn="true" value="${WorkspacePath}/src"/>	                                     
                                     								
                 </option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1775440438" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>

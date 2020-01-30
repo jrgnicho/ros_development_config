@@ -24,13 +24,16 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
-#ifndef IN_SOURCE
 	<linkedResources>
 		<link>
 			<name>${ProjName}_src</name>
 			<type>2</type>
 			<location>${ProjPath}</location>
 		</link>
+		<link>
+			<name>COLCON_INSTALL_LOC</name>
+			<type>2</type>
+			<locationURI>${WSInstallPath}</locationURI>
+		</link>
 	</linkedResources>
-#endif
 </projectDescription>
