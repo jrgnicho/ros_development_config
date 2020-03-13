@@ -9,6 +9,7 @@ BUILD_TOOLS=("catkin-tools" "catkin_make") #(catkin-tools catkin_make)
 SELECTED_BUILD_TOOL="${BUILD_TOOLS[0]}"
 TERMINAL_OPTIONS=("terminator" "mate-terminal")
 TERMINAL_SELECTION="${TERMINAL_OPTIONS[0]}"
+TEMP_BASH_FILE="bashrc_ros.tmp"
 
 SHORT_OPTIONS="r:w:l:p:c::h"
 LONG_OPTIONS="ros-distro:,workspace:,list-workspaces:,profile:,create::,help"
@@ -244,11 +245,11 @@ function main()
 function launch_terminator_terminal()
 {
 	TERMINAL_CMD="terminator"
-	cp -f ~/.bashrc ${LINUX_CONF_PATH}/bashrc.tmp
-	echo "source $LINUX_CONF_PATH/general/ros_core_setup.bash $ROS_DISTRO $CATKIN_WS">>"$LINUX_CONF_PATH/bashrc.tmp"
-	echo "echo -e \"\033]0;ROS-$ROS_DISTRO [$CATKIN_WS]\007\"">>"$LINUX_CONF_PATH/bashrc.tmp" # set title
-	echo "export PS1=\"ROS-$ROS_DISTRO[$CATKIN_WS]: \"&& clear">>"$LINUX_CONF_PATH/bashrc.tmp"
-	echo "echo \"$(tput setaf 3)ROS catkin workspace [$CATKIN_WS] is ready$(tput sgr0)\"">>"$LINUX_CONF_PATH/bashrc.tmp"
+	cp -f ~/.bashrc ${LINUX_CONF_PATH}/$TEMP_BASH_FILE
+	echo "source $LINUX_CONF_PATH/general/ros_core_setup.bash $ROS_DISTRO $CATKIN_WS">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE"
+	echo "echo -e \"\033]0;ROS-$ROS_DISTRO [$CATKIN_WS]\007\"">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE" # set title
+	echo "export PS1=\"ROS-$ROS_DISTRO[$CATKIN_WS]: \"&& clear">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE"
+	echo "echo \"$(tput setaf 3)ROS catkin workspace [$CATKIN_WS] is ready$(tput sgr0)\"">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE"
 	COMMAND="$TERMINAL_CMD -g $LINUX_CONF_PATH/general/terminator_config -l ros_devel"
 	# the terminator configuration file has been set to execute the "bashrc.temp" script on each new terminal
 	eval $COMMAND & >> /dev/null
@@ -259,9 +260,9 @@ function launch_mate_terminal()
 {
 	TERMINAL_CMD="mate-terminal"
 	# construct bash file
-	cp -f ~/.bashrc ${LINUX_CONF_PATH}/bashrc.tmp
-	echo "source $LINUX_CONF_PATH/general/ros_core_setup.bash $ROS_DISTRO $CATKIN_WS">>"$LINUX_CONF_PATH/bashrc.tmp"
-  TERMINAL_TAB_ARGS="--title='ros-$ROS_DISTRO: $CATKIN_WS' --profile=$PROFILE --command='bash --rcfile $LINUX_CONF_PATH/bashrc.tmp'"
+	cp -f ~/.bashrc ${LINUX_CONF_PATH}/$TEMP_BASH_FILE
+	echo "source $LINUX_CONF_PATH/general/ros_core_setup.bash $ROS_DISTRO $CATKIN_WS">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE"
+  TERMINAL_TAB_ARGS="--title='ros-$ROS_DISTRO: $CATKIN_WS' --profile=$PROFILE --command='bash --rcfile $LINUX_CONF_PATH/$TEMP_BASH_FILE'"
 	NEW_TAB_ARG="--tab $TERMINAL_TAB_ARGS"
 	COMMAND="$TERMINAL_CMD --window $TERMINAL_TAB_ARGS $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG"
 

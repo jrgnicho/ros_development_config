@@ -5,6 +5,7 @@ PROFILE="Default"
 ROS2_WS="ros2_ws"
 ROS_SYSTEM_PATH="/opt/ros"
 CREATE_NEW_WS=false
+TEMP_BASH_FILE="bashrc_ros2.tmp"
 BUILD_TOOLS=("colcon")
 SELECTED_BUILD_TOOL="${BUILD_TOOLS[0]}"
 TERMINAL_OPTIONS=("terminator" "mate-terminal")
@@ -234,11 +235,11 @@ function main()
 function launch_terminator_terminal()
 {
 	TERMINAL_CMD="terminator"
-	cp -f ~/.bashrc ${LINUX_CONF_PATH}/bashrc.tmp
-	echo "source $LINUX_CONF_PATH/general/ros2_env_setup.bash $ROS2_DISTRO $ROS2_WS">>"$LINUX_CONF_PATH/bashrc.tmp"
-	echo "echo -e \"\033]0;ROS-$ROS2_DISTRO [$ROS2_WS]\007\"">>"$LINUX_CONF_PATH/bashrc.tmp" # set title
-	echo "export PS1=\"ROS-$ROS2_DISTRO[$ROS2_WS]: \"&& clear">>"$LINUX_CONF_PATH/bashrc.tmp"
-	echo "echo \"$(tput setaf 3)ROS2 workspace [$ROS2_WS] is ready$(tput sgr0)\"">>"$LINUX_CONF_PATH/bashrc.tmp"
+	cp -f ~/.bashrc ${LINUX_CONF_PATH}/$TEMP_BASH_FILE
+	echo "source $LINUX_CONF_PATH/general/ros2_env_setup.bash $ROS2_DISTRO $ROS2_WS">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE"
+	echo "echo -e \"\033]0;ROS-$ROS2_DISTRO [$ROS2_WS]\007\"">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE" # set title
+	echo "export PS1=\"ROS-$ROS2_DISTRO[$ROS2_WS]: \"&& clear">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE"
+	echo "echo \"$(tput setaf 3)ROS2 workspace [$ROS2_WS] is ready$(tput sgr0)\"">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE"
 	COMMAND="$TERMINAL_CMD -g $LINUX_CONF_PATH/general/terminator_config -l ros2_devel"
 	# the terminator configuration file has been set to execute the "bashrc.temp" script on each new terminal
 	eval $COMMAND & >> /dev/null
@@ -249,9 +250,9 @@ function launch_mate_terminal()
 {
 	TERMINAL_CMD="mate-terminal"
 	# construct bash file
-	cp -f ~/.bashrc ${LINUX_CONF_PATH}/bashrc.tmp
-	echo "source $LINUX_CONF_PATH/general/ros2_env_setup.bash $ROS2_DISTRO $ROS2_WS">>"$LINUX_CONF_PATH/bashrc.tmp"
-  TERMINAL_TAB_ARGS="--title='ros-$ROS2_DISTRO: $ROS2_WS' --profile=$PROFILE --command='bash --rcfile $LINUX_CONF_PATH/bashrc.tmp'"
+	cp -f ~/.bashrc ${LINUX_CONF_PATH}/$TEMP_BASH_FILE
+	echo "source $LINUX_CONF_PATH/general/ros2_env_setup.bash $ROS2_DISTRO $ROS2_WS">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE"
+  TERMINAL_TAB_ARGS="--title='ros-$ROS2_DISTRO: $ROS2_WS' --profile=$PROFILE --command='bash --rcfile $LINUX_CONF_PATH/$TEMP_BASH_FILE'"
 	NEW_TAB_ARG="--tab $TERMINAL_TAB_ARGS"
 	COMMAND="$TERMINAL_CMD --window $TERMINAL_TAB_ARGS $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG"
 

@@ -297,7 +297,7 @@
     cursor_color = "#aaaaaa"
   [[ros2-devel]]
     cursor_color = "#ffffff"
-    custom_command = exec bash --rcfile ~/ros_development_config/bashrc.tmp
+    custom_command = exec bash --rcfile ~/ros_development_config/bashrc_ros2.tmp
     exit_action = hold
     font = Monospace 12
     foreground_color = "#00ff00"
@@ -309,7 +309,7 @@
   [[rosdevel]]
     background_color = "#18167b"
     cursor_color = "#ffffff"
-    custom_command = exec bash --rcfile ~/ros_development_config/bashrc.tmp
+    custom_command = exec bash --rcfile ~/ros_development_config/bashrc_ros.tmp
     exit_action = hold
     font = Monospace 12
     foreground_color = "#ffffff"
