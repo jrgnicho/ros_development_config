@@ -40,7 +40,7 @@ if __name__ == '__main__':
         print('COLCON WS was not found')
         sys.exit(-1)
 
-    CURRENT_COLCON_WS = os.environ[COLCON_VAR]
+    CURRENT_COLCON_WS = os.environ[COLCON_VAR].split(':')[0]
     CURRENT_COLCON_WS = CURRENT_COLCON_WS.replace('/' + WS_INSTALL_DIR_NAME, '')
     WS_ECLIPSE_PROJECTS_PATH = os.path.join(CURRENT_COLCON_WS, WS_ECLIPSE_PROJECTS_DIR_NAME)
 
