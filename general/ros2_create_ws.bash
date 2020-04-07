@@ -6,6 +6,7 @@ ROS_DISTRO=""
 ROS2_WS_DIR=""
 ROS_SETUP_SCRIPT="/opt/ros/$ROS_DISTRO/setup.bash"
 CLANG_FORMAT_FILE="$HOME/ros_development_config/eclipse/formatters/.clang-format"
+README_FILE="$HOME/ros_development_config/general/ROS2_README.md"
 
 function colcon_setup()
 {
@@ -50,20 +51,19 @@ function main()
 	fi
 	
 	### Copying files to workspace
-	# copying ros console config file
+	# copying readme file
 	if [ ! -f "$ROS2_WS_DIR/rosconsole.config" ]; then
 	  # copying default rosconsole config to workspace
-	  cp "$ROS_ROOT/config/rosconsole.config" "$ROS2_WS_DIR"
-	  echo "$(tput setaf 3)Copied default rosconsole.config to workspace directory$(tput sgr0)"
+	  cp "$README_FILE" "$ROS2_WS_DIR/README.md"
+	  echo "$(tput setaf 3)Copied README.md file to workspace directory$(tput sgr0)"
 	fi
 	
-	# copying ros console config file
+	# copying clang formatting config file
 	if [ ! -f "$ROS2_WS_DIR/.clang-format" ]; then
 	  # copying default .clang-format to workspace
 	  cp "$CLANG_FORMAT_FILE" "$ROS2_WS_DIR"
-	  echo "$(tput setaf 3)Copied default .clang-format to workspace directory$(tput sgr0)"
-	fi
-	
+	  echo "$(tput setaf 3)Copied .clang-format to workspace directory$(tput sgr0)"
+	fi	
 	
 	cd $HOME
 }
