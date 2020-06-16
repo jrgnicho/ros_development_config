@@ -88,23 +88,25 @@ if __name__ == '__main__':
         print('package path %s does not exists'%(colcon_pkg_path))
         sys.exit(-1)
 
-    # running cmake to create project files
+    # running colcon cmake to create project files
     temp_build_path = os.path.join(CURRENT_COLCON_WS, WS_BUILD_DIR_NAME, '.temp_build')
     if os.path.exists(temp_build_path):
       shutil.rmtree(temp_build_path)    
     os.makedirs(temp_build_path)
-    cmake_cmd = 'cmake -G"Eclipse CDT4 - Unix Makefiles" -H{} -B{}'.format(colcon_pkg_path, temp_build_path)
-    print('running cmake command "{}"'.format(cmake_cmd))
+    colcon_cmake_config_cmd = 'colcon build --packages-select {} --cmake-force-configure --cmake-args -G"Eclipse CDT4 - Unix Makefiles" -B{}'.format(colcon_pkg, temp_build_path)
+    print('Creating project files with command:\n"{}"'.format(colcon_cmake_config_cmd))
     try:
-      process = subprocess.run(cmake_cmd, shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True)
+      process = subprocess.run(colcon_cmake_config_cmd, shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True)
     except subprocess.CalledProcessError as e:
-      print(e.output)
-      shutil.rmtree(temp_build_path)
-      sys.exit(-1)
-    
+      print(e.output)  
 
     # extract include paths from eclipse files produced by cmake
     cproject_path = os.path.join(temp_build_path, '.cproject')
+    if not os.path.exists(cproject_path):
+      print('Failed to create .cproject file')
+      shutil.rmtree(temp_build_path)
+      sys.exit(-1)
+      
     cproject_tree = ET.parse(cproject_path)
     cproject_root = cproject_tree.getroot()
     include_entry_list = []
@@ -113,8 +115,7 @@ if __name__ == '__main__':
     for pathentry in cproject_root.iter('pathentry'):
       if kind_attrib_name in pathentry.attrib and kind_attrib_val == pathentry.attrib[kind_attrib_name]:
         include_entry_list.append(pathentry.attrib)
-        print('Found include entry {}'.format(pathentry.attrib))
-    
+        #print('Found include entry {}'.format(pathentry.attrib))    
 
     # remove temp build
     print('removing temp path {}'.format(temp_build_path))
