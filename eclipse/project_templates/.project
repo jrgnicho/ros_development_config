@@ -30,10 +30,5 @@
 			<type>2</type>
 			<location>${ProjPath}</location>
 		</link>
-		<link>
-			<name>COLCON_INSTALL_LOC</name>
-			<type>2</type>
-			<locationURI>${WSInstallPath}</locationURI>
-		</link>
 	</linkedResources>
 </projectDescription>
