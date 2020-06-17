@@ -89,11 +89,11 @@ if __name__ == '__main__':
         sys.exit(-1)
 
     # running colcon cmake to create project files
-    temp_build_path = os.path.join(CURRENT_COLCON_WS, WS_BUILD_DIR_NAME, '.temp_build')
-    if os.path.exists(temp_build_path):
-      shutil.rmtree(temp_build_path)    
-    os.makedirs(temp_build_path)
-    colcon_cmake_config_cmd = 'colcon build --packages-select {} --cmake-force-configure --cmake-args -G"Eclipse CDT4 - Unix Makefiles" -B{}'.format(colcon_pkg, temp_build_path)
+    #temp_build_path = os.path.join(CURRENT_COLCON_WS, WS_BUILD_DIR_NAME, '.temp_build')
+    #if os.path.exists(temp_build_path):
+    #  shutil.rmtree(temp_build_path)    
+    #os.makedirs(temp_build_path)
+    colcon_cmake_config_cmd = 'colcon build --packages-select {} --cmake-force-configure --cmake-args -G"Eclipse CDT4 - Unix Makefiles"'.format(colcon_pkg)
     print('Creating project files with command:\n"{}"'.format(colcon_cmake_config_cmd))
     try:
       process = subprocess.run(colcon_cmake_config_cmd, shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True)
@@ -101,10 +101,10 @@ if __name__ == '__main__':
       print(e.output)  
 
     # extract include paths from eclipse files produced by cmake
-    cproject_path = os.path.join(temp_build_path, '.cproject')
+    cproject_path = os.path.join(CURRENT_COLCON_WS,WS_BUILD_DIR_NAME,colcon_pkg,'.cproject')
     if not os.path.exists(cproject_path):
       print('Failed to create .cproject file')
-      shutil.rmtree(temp_build_path)
+      #shutil.rmtree(temp_build_path)
       sys.exit(-1)
       
     cproject_tree = ET.parse(cproject_path)
@@ -118,8 +118,8 @@ if __name__ == '__main__':
         #print('Found include entry {}'.format(pathentry.attrib))    
 
     # remove temp build
-    print('removing temp path {}'.format(temp_build_path))
-    shutil.rmtree(temp_build_path)
+    #print('removing temp path {}'.format(temp_build_path))
+    #shutil.rmtree(temp_build_path)
 
     # add include paths to template .cproject file
     cproject_tree = ET.parse(os.path.join(ECLIPSE_TEMPLATE_PATH,ECLIPSE_TEMPLATE_CPROJECT_FILE))
