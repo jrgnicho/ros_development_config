@@ -3,6 +3,7 @@
 ROS_DISTRO=""
 PROFILE="Default"
 CATKIN_WS="catkin_ws"
+CUSTOM_WS_SETUP_SCRIPT="env.bash"
 ROS_SYSTEM_PATH="/opt/ros"
 CREATE_NEW_WS=false
 BUILD_TOOLS=("catkin-tools" "catkin_make") #(catkin-tools catkin_make)
@@ -211,25 +212,57 @@ function main()
 	# check catkin workspace
 	if (! check_catkin_workspace_exists $CATKIN_WS $ROS_DISTRO); then
 
-	    if $CREATE_NEW_WS ; then
-	
-	      # checking that required variables have been set
-	      if [ "$ROS_DISTRO" == "" ] ; then
-	        echo "$(tput setaf 1)ROS distribution has not been set; recommended use:$(tput sgr0)"
-	        echo "$(tput setaf 1)ros_session -c [ros-distro] [catkin_ws]:$(tput sgr0)"
-	        exit 1
-	      fi
-	
-	      ROSBUILD_DIR="$HOME/ros/$ROS_DISTRO/rosbuild"
-	
-	      # workspace creation
-	      source "$HOME/ros_development_config/general/ros_create_workspace.bash" $ROS_DISTRO $CATKIN_WS $SELECTED_BUILD_TOOL $ROSBUILD_DIR
-	      
-	    else
-			  echo "$(tput setaf 1)Catkin workspace $CATKIN_WS for ros $ROS_DISTRO was not found$(tput sgr0)"
-			  exit 1
-	    fi
-  	fi
+    if $CREATE_NEW_WS ; then
+
+      # checking that required variables have been set
+      if [ "$ROS_DISTRO" == "" ] ; then
+        echo "$(tput setaf 1)ROS distribution has not been set; recommended use:$(tput sgr0)"
+        echo "$(tput setaf 1)ros_session -c [ros-distro] [catkin_ws]:$(tput sgr0)"
+        exit 1
+      fi
+
+      ROSBUILD_DIR="$HOME/ros/$ROS_DISTRO/rosbuild"
+
+      # workspace creation
+      source "$HOME/ros_development_config/general/ros_create_workspace.bash" $ROS_DISTRO $CATKIN_WS $SELECTED_BUILD_TOOL $ROSBUILD_DIR
+      
+    else
+		  echo "$(tput setaf 1)Catkin workspace $CATKIN_WS for ros $ROS_DISTRO was not found$(tput sgr0)"
+		  exit 1
+    fi
+	fi
+
+  ############### Checking prerequisites ######################
+  CATKIN_DIR="$HOME/ros/$ROS_DISTRO/$CATKIN_WS"
+  WS_SETUP_SCRIPT="$CATKIN_DIR/devel/setup.bash"
+
+  # check in case devel directory isn't default
+  devel_dir=`catkin locate -w $CATKIN_DIR -d 2> /dev/null`
+  if [ -n "$devel_dir" ]; then
+    WS_SETUP_SCRIPT="$devel_dir/setup.bash"
+  fi
+
+  if ! [ -f "$WS_SETUP_SCRIPT" ]; then
+	  echo "$(tput setaf 1)SCatkin setup script $WS_SETUP_SCRIPT was not found$(tput sgr0)"
+    exit 1
+  fi
+
+  # check directory for custom distribution level configuration script
+  CUSTOM_DISTRO_SETUP_SCRIPT="$HOME/ros/$ROS_DISTRO/setup.bash"
+  if ! [ -f "$CUSTOM_DISTRO_SETUP_SCRIPT" ]; then
+	  echo "$(tput setaf 3)Custom distro script $CUSTOM_DISTRO_SETUP_SCRIPT was not found, creating default one$(tput sgr0)"
+    echo "#!/bin/bash" > $CUSTOM_DISTRO_SETUP_SCRIPT
+    echo "####### WARNING - DO NOT DELETE THIS ######" >> $CUSTOM_DISTRO_SETUP_SCRIPT
+  fi
+
+  # check if custom worspace level setup script exists
+  CUSTOM_WS_SETUP_SCRIPT_PATH="$CATKIN_DIR/$CUSTOM_WS_SETUP_SCRIPT"
+  if ! [ -f "$CUSTOM_WS_SETUP_SCRIPT_PATH" ]; then
+	  echo "$(tput setaf 3)Creating workspace setup script $CUSTOM_WS_SETUP_SCRIPT_PATH$(tput sgr0)"
+    echo "#!/bin/bash" > $CUSTOM_WS_SETUP_SCRIPT_PATH
+    echo "source $CUSTOM_DISTRO_SETUP_SCRIPT" >> $CUSTOM_WS_SETUP_SCRIPT_PATH
+    echo "source $WS_SETUP_SCRIPT" >> $CUSTOM_WS_SETUP_SCRIPT_PATH
+  fi
 	
 	# launch terminals
 	if [ "$TERMINAL_SELECTION" == "${TERMINAL_OPTIONS[0]}" ]; then
@@ -247,9 +280,7 @@ function launch_terminator_terminal()
 	TERMINAL_CMD="terminator"
 	cp -f ~/.bashrc ${LINUX_CONF_PATH}/$TEMP_BASH_FILE
 	echo "source $LINUX_CONF_PATH/general/ros_core_setup.bash $ROS_DISTRO $CATKIN_WS">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE"
-	echo "echo -e \"\033]0;ROS-$ROS_DISTRO [$CATKIN_WS]\007\"">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE" # set title
-	echo "export PS1=\"ROS-$ROS_DISTRO[$CATKIN_WS]: \"&& clear">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE"
-	echo "echo \"$(tput setaf 3)ROS catkin workspace [$CATKIN_WS] is ready$(tput sgr0)\"">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE"
+  echo "echo -e \"\033]0;ROS-$ROS_DISTRO [$CATKIN_WS]\007\"">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE" # set title
 	COMMAND="$TERMINAL_CMD -g $LINUX_CONF_PATH/general/terminator_config -l ros_devel"
 	# the terminator configuration file has been set to execute the "bashrc.temp" script on each new terminal
 	eval $COMMAND & >> /dev/null

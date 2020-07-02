@@ -38,7 +38,14 @@ function main()
 	  echo "$(tput setaf 1)ros-$ROS_DISTRO has not been installed, aborting$(tput sgr0)"
 	  exit
 	fi
-	
+
+  # create setup script if there isn't one
+  CUSTOM_DISTRO_SETUP_SCRIPT="$HOME/ros2/$ROS_DISTRO/setup.bash"
+  if [ -f $CUSTOM_DISTRO_SETUP_SCRIPT ]; then
+    echo "#!/bin/bash" > $CUSTOM_DISTRO_SETUP_SCRIPT
+    echo "####### WARNING - DO NOT DELETE THIS ######" >> $CUSTOM_DISTRO_SETUP_SCRIPT
+  fi 
+	  
 	# set ros workspace paths
 	ROS2_WS_DIR="$HOME/ros2/$ROS_DISTRO/$2"
 	

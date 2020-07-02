@@ -2,6 +2,7 @@
 
 # variables
 CATKIN_WS="catkin_ws"
+CUSTOM_SETUP_SCRIPT="env.bash"
 
 # check arguments
 if [[ ( "$#" -lt 1 )]]; then
@@ -29,19 +30,22 @@ fi
 source "/opt/ros/$ROS_DISTRO/setup.bash"
 
 # ros catkin workspace setup script (default)
-script="$CATKIN_DIR/devel/setup.bash"
+WS_SETUP_SCRIPT="$CATKIN_DIR/devel/setup.bash"
 
 # check in case devel directory isn't default
 devel_dir=`catkin locate -w $CATKIN_DIR -d 2> /dev/null`
 if [ -n "$devel_dir" ]; then
-  script="$devel_dir/setup.bash"
+  WS_SETUP_SCRIPT="$devel_dir/setup.bash"
 fi
 
-if [ -f "$script" ]; then
-	source "$script"
-else
-	echo "$(tput setaf 1)Error sourcing the catkin workspace setup script $script$(tput sgr0)"
+if ! [ -f "$WS_SETUP_SCRIPT" ]; then
+	echo "$(tput setaf 1)Error sourcing the catkin workspace setup script $WS_SETUP_SCRIPT$(tput sgr0)"
+  exit 1
 fi
+
+# source workspace now
+CUSTOM_SETUP_SCRIPT_PATH="$CATKIN_DIR/$CUSTOM_SETUP_SCRIPT"
+source "$CUSTOM_SETUP_SCRIPT_PATH"
 
 # rosbuild workspace setup
 USER_LIBRARY_PATH="$HOME/ros/$ROS_DISTRO/rosbuild"
@@ -59,14 +63,7 @@ export ROSCONSOLE_CONFIG_FILE="$CATKIN_DIR/rosconsole.config"
 export ROS_PARALLEL_JOBS="-j2 -l2"
 export PYTHONPATH="$PYTHONPATH:$CATKIN_DIR/src:$ROSBUILD_DIR"
 export ROSCONSOLE_FORMAT='[${severity}]: ${message};'
-alias catkin_ws_source="source $script"
+alias catkin_ws_source="source $CUSTOM_SETUP_SCRIPT_PATH"
 
-# check directory for optional configuration scripts
-OPTIONAL_CONF_SCRIPT="$LINUX_CONF_PATH/ros/$ROS_DISTRO/setup.bash"
-if [ -f "$OPTIONAL_CONF_SCRIPT" ]; then
-	echo "$(tput setaf 3)Sourcing optional configuration script '$OPTIONAL_CONF_SCRIPT' $(tput sgr0)"
-  source "$OPTIONAL_CONF_SCRIPT"
-fi
-
-PS1="ros-$ROS_DISTRO: "
-echo "$(tput setaf 3)ROS $ROS_DISTRO is ready$(tput sgr0)"
+PS1="$CATKIN_WS[ros-$ROS_DISTRO]: "
+echo "$(tput setaf 3)ROS \"$CATKIN_WS\" workspace is ready$(tput sgr0)"
