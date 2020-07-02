@@ -2,6 +2,7 @@
 
 # variables
 ROS2_WS="ROS2_WS"
+CUSTOM_SETUP_SCRIPT="env.bash"
 
 # check arguments
 if [[ ( "$#" -lt 1 )]]; then
@@ -37,28 +38,20 @@ source "/opt/ros/$ROS2_DISTRO/setup.bash"
 ROS2WS_SOURCE_SCRIPT="$ROS2WS_DIR/install/setup.bash"
 COLCON_SETUP_SCRIPT="$LINUX_CONF_PATH/general/colcon_ws_setup.py"
 
-
-if [ -f "$ROS2WS_SOURCE_SCRIPT" ]; then
-	source "$ROS2WS_SOURCE_SCRIPT"
-else
+if ! [ -f "$ROS2WS_SOURCE_SCRIPT" ]; then
 	echo "$(tput setaf 1)Error sourcing the ros2 workspace setup script $ROS2WS_SOURCE_SCRIPT$(tput sgr0)"
+  exit 1
 fi
 
-# rosbuild workspace setup
-USER_LIBRARY_PATH="$HOME/ros/$ROS2_DISTRO/rosbuild"
+# source workspace now
+CUSTOM_SETUP_SCRIPT_PATH="$ROS2WS_DIR/$CUSTOM_SETUP_SCRIPT"
+source "$CUSTOM_SETUP_SCRIPT_PATH"
 
 # setting up ros environment variables and aliases
-export COLCON_HOME="$COLCON_HOME"
-alias ros2ws_source=". $ROS2WS_SOURCE_SCRIPT"
-alias colcon_ws_setup="python3 $COLCON_SETUP_SCRIPT"
-
-# check directory for optional configuration scripts
-OPTIONAL_CONF_SCRIPT="$LINUX_CONF_PATH/ros/$ROS2_DISTRO/setup.bash"
-if [ -f "$OPTIONAL_CONF_SCRIPT" ]; then
-	echo "$(tput setaf 3)Sourcing optional configuration script '$OPTIONAL_CONF_SCRIPT' $(tput sgr0)"
-  source "$OPTIONAL_CONF_SCRIPT"
-fi
+export COLCON_HOME="$ROS2WS_DIR"
+alias ros2ws_source=". $CUSTOM_SETUP_SCRIPT_PATH"  # used to source the workspace and user defined env variables
+alias colcon_ws_setup="python3 $COLCON_SETUP_SCRIPT"  # used to setup colcon mixin (optional)
 
 cd "$ROS2WS_DIR"
-PS1="ros2-$ROS2_DISTRO: "
-echo "$(tput setaf 3)ROS $ROS2_DISTRO is ready$(tput sgr0)"
+PS1="$ROS2_WS[ros2-$ROS2_DISTRO]: "
+echo "$(tput setaf 3)ROS2 \"$ROS2_WS\" workspace is ready$(tput sgr0)"

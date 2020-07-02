@@ -56,6 +56,13 @@ else
   exit
 fi
 
+# create setup script if there isn't one
+CUSTOM_DISTRO_SETUP_SCRIPT="$HOME/ros/$ROS_DISTRO/setup.bash"
+if [ -f $CUSTOM_DISTRO_SETUP_SCRIPT ]; then
+  echo "#!/bin/bash" > $CUSTOM_DISTRO_SETUP_SCRIPT
+  echo "####### WARNING - DO NOT DELETE THIS ######" >> $CUSTOM_DISTRO_SETUP_SCRIPT
+fi 
+
 # set ros workspace paths
 ROSBUILD_DIR="$HOME/ros/$ROS_DISTRO/rosbuild"
 CATKIN_DIR="$HOME/ros/$ROS_DISTRO/$2"

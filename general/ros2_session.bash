@@ -4,6 +4,7 @@ ROS2_DISTRO=""
 PROFILE="Default"
 ROS2_WS="ros2_ws"
 ROS_SYSTEM_PATH="/opt/ros"
+CUSTOM_WS_SETUP_SCRIPT="env.bash"
 CREATE_NEW_WS=false
 TEMP_BASH_FILE="bashrc_ros2.tmp"
 BUILD_TOOLS=("colcon")
@@ -18,6 +19,19 @@ HELP_TEXT="Usage:\n
 -l|--list-workspaces [ros2-distro]\n
 -c|--ros2-distro [ros2-distro] -w|--workspace [workspace name] --create\n
 -h|--help \n"
+
+function check_colcon()
+{
+  
+  pkg="python3-colcon-common-extensions"
+  echo "Check for package $pkg"
+  colcon --help >/dev/null
+  if [ $? -eq 0 ] ; then
+    echo "colcon was found"  
+  else
+    return 1    
+  fi
+}
 
 function select_build_tool()
 {
@@ -205,6 +219,14 @@ function main()
 
 	if (! check_ros2_workspace_exists $ROS2_WS $ROS2_DISTRO); then
 	    if $CREATE_NEW_WS ; then	
+
+        # check colcon 
+        check_colcon
+        if [ $? -ne 0 ]; then
+          echo "$(tput setaf 1)Colcon is not installed, check https://colcon.readthedocs.io/en/released/user/installation.html $(tput sgr0)"
+          exit 1
+        fi
+        
 	      # checking that required variables have been set
 	      if [ "$ROS2_DISTRO" == "" ] ; then
 	        echo "$(tput setaf 1)ROS distribution has not been set; recommended use:$(tput sgr0)"
@@ -214,14 +236,44 @@ function main()
 	
 	      # workspace creation
 	      source "$HOME/ros_development_config/general/ros2_create_ws.bash" $ROS2_DISTRO $ROS2_WS $SELECTED_BUILD_TOOL
+        if [ $? -ne 0 ]; then
+          echo "$(tput setaf 1)Failed to create colcon workspace $(tput sgr0)"
+          exit 1
+        fi
 	      
 	    else
 			  echo "$(tput setaf 1)ROS2 workspace $ROS2_WS for ros $ROS2_DISTRO was not found$(tput sgr0)"
 			  exit 1
 	    fi
   	fi
+
+  ############### Checking prerequisites ######################
+  ROS2WS_DIR="$HOME/ros2/$ROS2_DISTRO/$ROS2_WS"
+  WS_SETUP_SCRIPT="$ROS2WS_DIR/install/setup.bash"
+
+  if ! [ -f "$WS_SETUP_SCRIPT" ]; then
+	  echo "$(tput setaf 1)Error sourcing the ros2 workspace setup script $WS_SETUP_SCRIPT$(tput sgr0)"
+    exit 1
+  fi
+
+  # check directory for custom distribution level configuration script
+  CUSTOM_DISTRO_SETUP_SCRIPT="$HOME/ros2/$ROS2_DISTRO/setup.bash"
+  if ! [ -f "$CUSTOM_DISTRO_SETUP_SCRIPT" ]; then
+	  echo "$(tput setaf 3)Custom distro script $CUSTOM_DISTRO_SETUP_SCRIPT was not found, creating default one$(tput sgr0)"
+    echo "#!/bin/bash" > $CUSTOM_DISTRO_SETUP_SCRIPT
+    echo "####### WARNING - DO NOT DELETE THIS ######" >> $CUSTOM_DISTRO_SETUP_SCRIPT
+  fi
+
+  # check if custom worspace level setup script exists
+  CUSTOM_WS_SETUP_SCRIPT_PATH="$ROS2WS_DIR/$CUSTOM_WS_SETUP_SCRIPT"
+  if ! [ -f "$CUSTOM_WS_SETUP_SCRIPT_PATH" ]; then
+	  echo "$(tput setaf 3)Creating workspace setup script $CUSTOM_WS_SETUP_SCRIPT_PATH$(tput sgr0)"
+    echo "#!/bin/bash" > $CUSTOM_WS_SETUP_SCRIPT_PATH
+    echo "source $CUSTOM_DISTRO_SETUP_SCRIPT" >> $CUSTOM_WS_SETUP_SCRIPT_PATH
+    echo "source $WS_SETUP_SCRIPT" >> $CUSTOM_WS_SETUP_SCRIPT_PATH
+  fi
 	
-	# launch terminals
+	###############  launch terminals ###############   
 	if [ "$TERMINAL_SELECTION" == "${TERMINAL_OPTIONS[0]}" ]; then
 		launch_terminator_terminal
 	elif [ "$TERMINAL_SELECTION" == "${TERMINAL_OPTIONS[1]}" ]; then
@@ -237,9 +289,7 @@ function launch_terminator_terminal()
 	TERMINAL_CMD="terminator"
 	cp -f ~/.bashrc ${LINUX_CONF_PATH}/$TEMP_BASH_FILE
 	echo "source $LINUX_CONF_PATH/general/ros2_env_setup.bash $ROS2_DISTRO $ROS2_WS">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE"
-	echo "echo -e \"\033]0;ROS-$ROS2_DISTRO [$ROS2_WS]\007\"">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE" # set title
-	echo "export PS1=\"ROS-$ROS2_DISTRO[$ROS2_WS]: \"&& clear">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE"
-	echo "echo \"$(tput setaf 3)ROS2 workspace [$ROS2_WS] is ready$(tput sgr0)\"">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE"
+  echo "echo -e \"\033]0;ROS2-$ROS2_DISTRO [$ROS2_WS]\007\"">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE" # set title
 	COMMAND="$TERMINAL_CMD -g $LINUX_CONF_PATH/general/terminator_config -l ros2_devel"
 	# the terminator configuration file has been set to execute the "bashrc.temp" script on each new terminal
 	eval $COMMAND & >> /dev/null
