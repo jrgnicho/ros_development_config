@@ -17,6 +17,10 @@
 
   `kernel.yama.ptrace_scope = 0`
   
+  Then run the following command:
+  
+  `echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope`
+  
   For more on this issue see [here](https://askubuntu.com/questions/41629/after-upgrade-gdb-wont-attach-to-process)
  
 #### Create Eclipse Projects  
