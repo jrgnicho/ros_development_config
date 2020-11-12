@@ -269,6 +269,8 @@ function main()
   if ! [ -f "$CUSTOM_WS_SETUP_SCRIPT_PATH" ]; then
 	  echo "$(tput setaf 3)Creating workspace setup script $CUSTOM_WS_SETUP_SCRIPT_PATH$(tput sgr0)"
     echo "#!/bin/bash" > $CUSTOM_WS_SETUP_SCRIPT_PATH
+    echo "source \"/usr/share/colcon_cd/function/colcon_cd.sh\"" >> $CUSTOM_WS_SETUP_SCRIPT_PATH
+    echo "source \"/usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash\"" >> $CUSTOM_WS_SETUP_SCRIPT_PATH
     echo "source $CUSTOM_DISTRO_SETUP_SCRIPT" >> $CUSTOM_WS_SETUP_SCRIPT_PATH
     echo "source $WS_SETUP_SCRIPT" >> $CUSTOM_WS_SETUP_SCRIPT_PATH
   fi
