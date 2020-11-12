@@ -53,5 +53,9 @@ alias ros2ws_source=". $CUSTOM_SETUP_SCRIPT_PATH"  # used to source the workspac
 alias colcon_ws_setup="python3 $COLCON_SETUP_SCRIPT"  # used to setup colcon mixin (optional)
 
 cd "$ROS2WS_DIR"
+
+# running colcon_cd to set ws directory as root path
+colcon_cd --set
+
 PS1="$ROS2_WS[ros2-$ROS2_DISTRO]: "
 echo "$(tput setaf 3)ROS2 \"$ROS2_WS\" workspace is ready$(tput sgr0)"
