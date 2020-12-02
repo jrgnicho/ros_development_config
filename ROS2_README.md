@@ -78,7 +78,7 @@ This feature is useful when the repositories in the workspace contain a mixture 
 #### Create Eclipse project
 - From the workspace top level directory run the following cmd on a existing ros2 package **my_ros2_pkg**
     ```
-    create_eclipse_ros2_proj my_ros2_pkg
+    create_eclipse_proj my_ros2_pkg
     ```
 - This will create the eclipse project files under the `projects` directory.
 - Then in the "Eclipse CDT" IDE you can import as an "Existing Project Into Workspace" by browsing to this `projects` directory and selecting your ros2 package.
