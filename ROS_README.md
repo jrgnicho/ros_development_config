@@ -15,6 +15,7 @@
 	```
 	ros_session groovy my_catkin_workspace
 	```
+
 ### List current catkin workspaces
 +  In a terminal run the following command to list the current workspaces:
 ```
@@ -28,6 +29,7 @@ ros_session -l kinetic
   	.
   	.
   ```
+  If using another ros distro then type that distro name instead
 
 ### Workspace Context Commands
 The following commands can be used within the context of a catkin workspace:
@@ -37,15 +39,12 @@ The following commands can be used within the context of a catkin workspace:
     catkin_ws_source
     ```
     
-- Install [eclipsify](https://github.com/ethz-asl/eclipsify)  
+- Create Eclipse Project  
     ```
-    install_eclipsify
+    create_eclipse_proj [pkg]
     ```
-    This will download the eclipsify repository into your workspace.  You can then create eclipse projects for your packages by calling the following command:
-    ```
-    create_eclipse_projects
-    ```
-    This creates a `projects` directory in your workspace.  Then in the "Eclipse CDT" IDE you can import as an "Existing Project Into Workspace" by browsing to this `projects` directory and selecting you ros packages.
+
+    This creates eclipse project files in the `projects\pkg` directory of the workspace.  Then in the "Eclipse CDT" IDE you can import the project by selecting the "Existing Project Into Workspace" and then browsing to the `projects` directory and selecting your ROS package.
     
 	
 

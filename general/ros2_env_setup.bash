@@ -51,6 +51,7 @@ source "$CUSTOM_SETUP_SCRIPT_PATH"
 export COLCON_HOME="$ROS2WS_DIR"
 alias ros2ws_source=". $CUSTOM_SETUP_SCRIPT_PATH"  # used to source the workspace and user defined env variables
 alias colcon_ws_setup="python3 $COLCON_SETUP_SCRIPT"  # used to setup colcon mixin (optional)
+alias create_eclipse_proj="$HOME/ros_development_config/eclipse/create_ros2_eclipse_project.py"
 
 cd "$ROS2WS_DIR"
 

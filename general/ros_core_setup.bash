@@ -64,6 +64,7 @@ export ROS_PARALLEL_JOBS="-j2 -l2"
 export PYTHONPATH="$PYTHONPATH:$CATKIN_DIR/src:$ROSBUILD_DIR"
 export ROSCONSOLE_FORMAT='[${severity}]: ${message};'
 alias catkin_ws_source="source $CUSTOM_SETUP_SCRIPT_PATH"
+alias create_eclipse_proj="source $HOME/ros_development_config/eclipse/create_ros1_eclipse_project.sh"
 
 PS1="$CATKIN_WS[ros-$ROS_DISTRO]: "
 echo "$(tput setaf 3)ROS \"$CATKIN_WS\" workspace is ready$(tput sgr0)"
