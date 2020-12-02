@@ -6,7 +6,7 @@ import shutil
 import xml.etree.ElementTree as ET
 
 HOME_VAR = 'HOME'
-COLCON_VAR = 'COLCON_PREFIX_PATH'
+WORSPACE_VAR = 'ROS_WORKSPACE'
 ROS_DISTRO_VAR = 'ROS_DISTRO'
 ROS_DEVEL_CONFIG_PATH = os.path.join(os.path.expandvars('$HOME'), os.path.basename('ros_development_config'))
 
@@ -17,7 +17,7 @@ WS_SRC_DIR_NAME = 'src'
 WS_INSTALL_DIR_NAME = 'install'
 ROS_DISTRO_PATH_TEMPLATE = '/opt/ros/ROS_DISTRO'
 
-ECLIPSE_TEMPLATE_PATH = os.path.join(ROS_DEVEL_CONFIG_PATH , 'eclipse' ,'project_templates/ros2')
+ECLIPSE_TEMPLATE_PATH = os.path.join(ROS_DEVEL_CONFIG_PATH , 'eclipse' ,'project_templates/ros1')
 ECLIPSE_CPROJECT_FILE = '.cproject'
 ECLIPSE_TEMPLATE_CPROJECT_FILE = '.cproject_template'
 ECLIPSE_PROJECT_FILE = '.project'
@@ -36,21 +36,21 @@ CPROJECT_XML_DECLARATIONS = '''<?xml version="1.0" encoding="UTF-8" standalone="
 if __name__ == '__main__':
     
     if len(sys.argv) < 2:
-        print('Needs the ROS2 package name')
+        print('Needs the ROS package name')
         sys.exit(-1)
         
-    colcon_pkg = sys.argv[1]
+    pkg_name = sys.argv[1]
     
-    # get colcon env info
-    CURRENT_COLCON_WS = ''
+    # get ws env info
+    WS_DIR = ''
     WS_ECLIPSE_PROJECTS_PATH = ''
-    if COLCON_VAR not in os.environ :
-        print('COLCON WS was not found')
+    if WORSPACE_VAR not in os.environ :
+        print('ROS WS was not found')
         sys.exit(-1)
 
-    CURRENT_COLCON_WS = os.environ[COLCON_VAR].split(':')[0]
-    CURRENT_COLCON_WS = CURRENT_COLCON_WS.replace('/' + WS_INSTALL_DIR_NAME, '')
-    WS_ECLIPSE_PROJECTS_PATH = os.path.join(CURRENT_COLCON_WS, WS_ECLIPSE_PROJECTS_DIR_NAME)
+    WS_DIR = os.environ[WORSPACE_VAR].split(':')[0]
+    print(WS_DIR)
+    WS_ECLIPSE_PROJECTS_PATH = os.path.join(WS_DIR, WS_ECLIPSE_PROJECTS_DIR_NAME)
 
     # get ros distro
     if ROS_DISTRO_VAR not in os.environ :
@@ -59,45 +59,41 @@ if __name__ == '__main__':
     ROS_DISTRO_PATH = ROS_DISTRO_PATH_TEMPLATE.replace('ROS_DISTRO',os.environ[ROS_DISTRO_VAR])
     
     # checking paths
-    if not os.path.exists(CURRENT_COLCON_WS):
-        print('COLCON WS path %s does not exists'%(CURRENT_COLCON_WS))
+    if not os.path.exists(WS_DIR):
+        print('WS path %s does not exists'%(WS_DIR))
         sys.exit(-1)
         
-    print('Found COLCON WS at %s' % (CURRENT_COLCON_WS))    
+    print('Found WS at %s' % (WS_DIR))    
         
     if not os.path.exists(WS_ECLIPSE_PROJECTS_PATH):
         os.mkdir(WS_ECLIPSE_PROJECTS_PATH)
         print('Created Eclipse projects directory at %s' % (WS_ECLIPSE_PROJECTS_PATH))
 
     # obtaining project path
-    colcon_pkg_path=''
+    pkg_path=''
     try:
-      cmd1 = 'cd %s'%(CURRENT_COLCON_WS)
-      cmd2 = 'colcon info --packages-select %s| grep path'%(colcon_pkg)
-      process = subprocess.run(cmd1 +' && ' + cmd2, shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True)
-      colcon_pkg_path = process.stdout.split('\n')[0].split(' ')[1]
+      cmd1 = 'rospack find %s'%(pkg_name)
+      process = subprocess.run(cmd1 , shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True)
+      pkg_path = process.stdout.split('\n')[0]
     except subprocess.CalledProcessError as e:
       print(e.output)
       sys.exit(-1)
 
-    if not os.path.isabs(colcon_pkg_path):
-        colcon_pkg_path = os.path.join(CURRENT_COLCON_WS, colcon_pkg_path)
-
     # check package path existence
-    if not os.path.exists(colcon_pkg_path):
-        print('package path %s does not exists'%(colcon_pkg_path))
+    if not os.path.exists(pkg_path):
+        print('package path %s does not exists'%(pkg_path))
         sys.exit(-1)
 
-    # running colcon cmake to create project files
-    colcon_cmake_config_cmd = 'colcon build --packages-select {} --cmake-force-configure --cmake-args -G"Eclipse CDT4 - Unix Makefiles"'.format(colcon_pkg)
-    print('Creating project files with command:\n"{}"'.format(colcon_cmake_config_cmd))
+    # running build with cmake options to create project files
+    build_cmd = 'catkin build --no-deps {} --force-cmake -G"Eclipse CDT4 - Unix Makefiles"'.format(pkg_name)
+    print('Creating project files with command:\n"{}"'.format(build_cmd))
     try:
-      process = subprocess.run(colcon_cmake_config_cmd, shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True)
+      process = subprocess.run(build_cmd, shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True)
     except subprocess.CalledProcessError as e:
       print(e.output)  
 
     # extract include paths from eclipse files produced by cmake
-    cproject_path = os.path.join(CURRENT_COLCON_WS,WS_BUILD_DIR_NAME,colcon_pkg,'.cproject')
+    cproject_path = os.path.join(WS_DIR,WS_BUILD_DIR_NAME,pkg_name,'.cproject')
     if not os.path.exists(cproject_path):
       print('Failed to create .cproject file')
       sys.exit(-1)
@@ -148,10 +144,10 @@ if __name__ == '__main__':
     # creating eclipse project files
     eclipse_files = [ECLIPSE_CPROJECT_FILE, ECLIPSE_PROJECT_FILE,ECLIPSE_LANG_SETTINGS_FILE]
     subs_tokens = {}
-    subs_tokens[ECLIPSE_PROJECT_NAME_TOKEN] = colcon_pkg
-    subs_tokens[ECLIPSE_PROJECT_PATH_TOKEN] = colcon_pkg_path
-    subs_tokens[ECLIPSE_WS_PATH_TOKEN] = CURRENT_COLCON_WS
-    subs_tokens[ECLIPSE_WS_INSTALL_PATH_TOKEN] = os.path.join(CURRENT_COLCON_WS, WS_INSTALL_DIR_NAME)
+    subs_tokens[ECLIPSE_PROJECT_NAME_TOKEN] = pkg_name
+    subs_tokens[ECLIPSE_PROJECT_PATH_TOKEN] = pkg_path
+    subs_tokens[ECLIPSE_WS_PATH_TOKEN] = WS_DIR
+    subs_tokens[ECLIPSE_WS_INSTALL_PATH_TOKEN] = os.path.join(WS_DIR, WS_INSTALL_DIR_NAME)
     subs_tokens[ECLIPSE_ROS_DISTRO_PATH_TOKEN] = ROS_DISTRO_PATH
     
         # Read in the file
@@ -164,7 +160,7 @@ if __name__ == '__main__':
             filedata = filedata.replace(token, str_rep)
         
         # Write the file out again
-        out_file_path = os.path.join(WS_ECLIPSE_PROJECTS_PATH,colcon_pkg,fpath)
+        out_file_path = os.path.join(WS_ECLIPSE_PROJECTS_PATH,pkg_name,fpath)
         
         # check parent path
         parent_path = os.path.dirname(out_file_path)
