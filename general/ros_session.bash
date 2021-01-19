@@ -243,7 +243,7 @@ function main()
   fi
 
   if ! [ -f "$WS_SETUP_SCRIPT" ]; then
-	  echo "$(tput setaf 1)SCatkin setup script $WS_SETUP_SCRIPT was not found$(tput sgr0)"
+	  echo "$(tput setaf 1)Catkin setup script $WS_SETUP_SCRIPT was not found$(tput sgr0)"
     exit 1
   fi
 
