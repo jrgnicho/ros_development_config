@@ -43,12 +43,11 @@ function main()
 
   done
   
-  for pkg in ${REQUIRED_PACKAGES[*]}
-  do
-    #echo "check debian package \"$pkg\" 0"
-    check_debian $pkg 0
-
-  done
+  #for pkg in ${REQUIRED_PACKAGES[*]}
+  #do
+  #  #echo "check debian package \"$pkg\" 0"
+  #  check_debian $pkg 0
+  #done
 }
 
 main
