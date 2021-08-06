@@ -5,6 +5,7 @@ PROFILE="Default"
 ROS2_WS="ros2_ws"
 ROS_SYSTEM_PATH="/opt/ros"
 CUSTOM_WS_SETUP_SCRIPT="env.bash"
+CUSTOM_WS_SCRIPT_TEMPLATE="ros2/env_script_template"
 CREATE_NEW_WS=false
 TEMP_BASH_FILE="bashrc_ros2.tmp"
 ROS_ENV_SETUP_SCRIPT="ros2/ros2_env_setup.bash"
@@ -270,11 +271,15 @@ function main()
   CUSTOM_WS_SETUP_SCRIPT_PATH="$ROS2WS_DIR/$CUSTOM_WS_SETUP_SCRIPT"
   if ! [ -f "$CUSTOM_WS_SETUP_SCRIPT_PATH" ]; then
 	  echo "$(tput setaf 3)Creating workspace setup script $CUSTOM_WS_SETUP_SCRIPT_PATH$(tput sgr0)"
-    echo "#!/bin/bash" > $CUSTOM_WS_SETUP_SCRIPT_PATH
-    echo "source \"/usr/share/colcon_cd/function/colcon_cd.sh\"" >> $CUSTOM_WS_SETUP_SCRIPT_PATH
-    echo "source \"/usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash\"" >> $CUSTOM_WS_SETUP_SCRIPT_PATH
-    echo "source $CUSTOM_DISTRO_SETUP_SCRIPT" >> $CUSTOM_WS_SETUP_SCRIPT_PATH
-    echo "source $WS_SETUP_SCRIPT" >> $CUSTOM_WS_SETUP_SCRIPT_PATH
+    #echo "#!/bin/bash" > $CUSTOM_WS_SETUP_SCRIPT_PATH
+    #echo "source \"/usr/share/colcon_cd/function/colcon_cd.sh\"" >> $CUSTOM_WS_SETUP_SCRIPT_PATH
+    #echo "source \"/usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash\"" >> $CUSTOM_WS_SETUP_SCRIPT_PATH
+    #echo "source $CUSTOM_DISTRO_SETUP_SCRIPT" >> $CUSTOM_WS_SETUP_SCRIPT_PATH
+    #echo "source $WS_SETUP_SCRIPT" >> $CUSTOM_WS_SETUP_SCRIPT_PATH
+
+    cat "$HOME/ros_development_config/general/$CUSTOM_WS_SCRIPT_TEMPLATE" > $CUSTOM_WS_SETUP_SCRIPT_PATH
+    sed -i "7 i source $CUSTOM_DISTRO_SETUP_SCRIPT" $CUSTOM_WS_SETUP_SCRIPT_PATH
+    sed -i "8 i WS_SOURCE_FILE=$WS_SETUP_SCRIPT" $CUSTOM_WS_SETUP_SCRIPT_PATH
   fi
 	
 	###############  launch terminals ###############   

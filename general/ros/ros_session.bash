@@ -4,6 +4,7 @@ ROS_DISTRO=""
 PROFILE="Default"
 CATKIN_WS="catkin_ws"
 CUSTOM_WS_SETUP_SCRIPT="env.bash"
+CUSTOM_WS_SCRIPT_TEMPLATE="ros/env_script_template"
 ROS_ENV_SETUP_SCRIPT="ros/ros_env_setup.bash"
 ROS_SYSTEM_PATH="/opt/ros"
 CREATE_NEW_WS=false
@@ -260,9 +261,12 @@ function main()
   CUSTOM_WS_SETUP_SCRIPT_PATH="$CATKIN_DIR/$CUSTOM_WS_SETUP_SCRIPT"
   if ! [ -f "$CUSTOM_WS_SETUP_SCRIPT_PATH" ]; then
 	  echo "$(tput setaf 3)Creating workspace setup script $CUSTOM_WS_SETUP_SCRIPT_PATH$(tput sgr0)"
-    echo "#!/bin/bash" > $CUSTOM_WS_SETUP_SCRIPT_PATH
-    echo "source $CUSTOM_DISTRO_SETUP_SCRIPT" >> $CUSTOM_WS_SETUP_SCRIPT_PATH
-    echo "source $WS_SETUP_SCRIPT" >> $CUSTOM_WS_SETUP_SCRIPT_PATH
+    cat "$HOME/ros_development_config/general/$CUSTOM_WS_SCRIPT_TEMPLATE" > $CUSTOM_WS_SETUP_SCRIPT_PATH
+    #echo "#!/bin/bash" > $CUSTOM_WS_SETUP_SCRIPT_PATH
+    #echo "source $CUSTOM_DISTRO_SETUP_SCRIPT" >> $CUSTOM_WS_SETUP_SCRIPT_PATH
+    #echo "source $WS_SETUP_SCRIPT" >> $CUSTOM_WS_SETUP_SCRIPT_PATH
+    sed -i "3 i source $CUSTOM_DISTRO_SETUP_SCRIPT" $CUSTOM_WS_SETUP_SCRIPT_PATH
+    sed -i "4 i WS_SOURCE_FILE=$WS_SETUP_SCRIPT" $CUSTOM_WS_SETUP_SCRIPT_PATH
   fi
 	
 	# launch terminals
