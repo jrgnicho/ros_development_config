@@ -4,6 +4,7 @@ ROS_DISTRO=""
 PROFILE="Default"
 CATKIN_WS="catkin_ws"
 CUSTOM_WS_SETUP_SCRIPT="env.bash"
+ROS_ENV_SETUP_SCRIPT="ros/ros_env_setup.bash"
 ROS_SYSTEM_PATH="/opt/ros"
 CREATE_NEW_WS=false
 BUILD_TOOLS=("catkin-tools" "catkin_make") #(catkin-tools catkin_make)
@@ -224,7 +225,7 @@ function main()
       ROSBUILD_DIR="$HOME/ros/$ROS_DISTRO/rosbuild"
 
       # workspace creation
-      source "$HOME/ros_development_config/general/ros_create_workspace.bash" $ROS_DISTRO $CATKIN_WS $SELECTED_BUILD_TOOL $ROSBUILD_DIR
+      source "$HOME/ros_development_config/general/ros/ros_create_workspace.bash" $ROS_DISTRO $CATKIN_WS $SELECTED_BUILD_TOOL $ROSBUILD_DIR
       
     else
 		  echo "$(tput setaf 1)Catkin workspace $CATKIN_WS for ros $ROS_DISTRO was not found$(tput sgr0)"
@@ -279,7 +280,7 @@ function launch_terminator_terminal()
 {
 	TERMINAL_CMD="terminator"
 	cp -f ~/.bashrc ${LINUX_CONF_PATH}/$TEMP_BASH_FILE
-	echo "source $LINUX_CONF_PATH/general/ros_core_setup.bash $ROS_DISTRO $CATKIN_WS">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE"
+	echo "source $LINUX_CONF_PATH/general/$ROS_ENV_SETUP_SCRIPT $ROS_DISTRO $CATKIN_WS">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE"
   echo "echo -e \"\033]0;ROS-$ROS_DISTRO [$CATKIN_WS]\007\"">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE" # set title
 	COMMAND="$TERMINAL_CMD -g $LINUX_CONF_PATH/general/terminator_config -l ros_devel"
 	# the terminator configuration file has been set to execute the "bashrc.temp" script on each new terminal
@@ -292,7 +293,7 @@ function launch_mate_terminal()
 	TERMINAL_CMD="mate-terminal"
 	# construct bash file
 	cp -f ~/.bashrc ${LINUX_CONF_PATH}/$TEMP_BASH_FILE
-	echo "source $LINUX_CONF_PATH/general/ros_core_setup.bash $ROS_DISTRO $CATKIN_WS">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE"
+	echo "source $LINUX_CONF_PATH/general/$ROS_ENV_SETUP_SCRIPT $ROS_DISTRO $CATKIN_WS">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE"
   TERMINAL_TAB_ARGS="--title='ros-$ROS_DISTRO: $CATKIN_WS' --profile=$PROFILE --command='bash --rcfile $LINUX_CONF_PATH/$TEMP_BASH_FILE'"
 	NEW_TAB_ARG="--tab $TERMINAL_TAB_ARGS"
 	COMMAND="$TERMINAL_CMD --window $TERMINAL_TAB_ARGS $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG"

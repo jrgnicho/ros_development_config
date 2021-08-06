@@ -7,6 +7,8 @@ ROS_SYSTEM_PATH="/opt/ros"
 CUSTOM_WS_SETUP_SCRIPT="env.bash"
 CREATE_NEW_WS=false
 TEMP_BASH_FILE="bashrc_ros2.tmp"
+ROS_ENV_SETUP_SCRIPT="ros2/ros2_env_setup.bash"
+ROS_CREATE_WS_SCRIPT="ros2/ros2_create_ws.bash"
 BUILD_TOOLS=("colcon")
 SELECTED_BUILD_TOOL="${BUILD_TOOLS[0]}"
 TERMINAL_OPTIONS=("terminator" "mate-terminal")
@@ -235,7 +237,7 @@ function main()
 	      fi
 	
 	      # workspace creation
-	      source "$HOME/ros_development_config/general/ros2_create_ws.bash" $ROS2_DISTRO $ROS2_WS $SELECTED_BUILD_TOOL
+	      source "$HOME/ros_development_config/general/$ROS_CREATE_WS_SCRIPT" $ROS2_DISTRO $ROS2_WS $SELECTED_BUILD_TOOL
         if [ $? -ne 0 ]; then
           echo "$(tput setaf 1)Failed to create colcon workspace $(tput sgr0)"
           exit 1
@@ -290,7 +292,7 @@ function launch_terminator_terminal()
 {
 	TERMINAL_CMD="terminator"
 	cp -f ~/.bashrc ${LINUX_CONF_PATH}/$TEMP_BASH_FILE
-	echo "source $LINUX_CONF_PATH/general/ros2_env_setup.bash $ROS2_DISTRO $ROS2_WS">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE"
+	echo "source $LINUX_CONF_PATH/general/$ROS_ENV_SETUP_SCRIPT $ROS2_DISTRO $ROS2_WS">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE"
   echo "echo -e \"\033]0;ROS2-$ROS2_DISTRO [$ROS2_WS]\007\"">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE" # set title
 	COMMAND="$TERMINAL_CMD -g $LINUX_CONF_PATH/general/terminator_config -l ros2_devel"
 	# the terminator configuration file has been set to execute the "bashrc.temp" script on each new terminal
@@ -303,7 +305,7 @@ function launch_mate_terminal()
 	TERMINAL_CMD="mate-terminal"
 	# construct bash file
 	cp -f ~/.bashrc ${LINUX_CONF_PATH}/$TEMP_BASH_FILE
-	echo "source $LINUX_CONF_PATH/general/ros2_env_setup.bash $ROS2_DISTRO $ROS2_WS">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE"
+	echo "source $LINUX_CONF_PATH/general/$ROS_ENV_SETUP_SCRIPT $ROS2_DISTRO $ROS2_WS">>"$LINUX_CONF_PATH/$TEMP_BASH_FILE"
   TERMINAL_TAB_ARGS="--title='ros-$ROS2_DISTRO: $ROS2_WS' --profile=$PROFILE --command='bash --rcfile $LINUX_CONF_PATH/$TEMP_BASH_FILE'"
 	NEW_TAB_ARG="--tab $TERMINAL_TAB_ARGS"
 	COMMAND="$TERMINAL_CMD --window $TERMINAL_TAB_ARGS $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG $NEW_TAB_ARG"

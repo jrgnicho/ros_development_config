@@ -6,7 +6,7 @@ ROS_DISTRO=""
 ROS2_WS_DIR=""
 ROS_SETUP_SCRIPT="/opt/ros/$ROS_DISTRO/setup.bash"
 CLANG_FORMAT_FILE="$HOME/ros_development_config/eclipse/formatters/.clang-format"
-README_FILE="$HOME/ros_development_config/general/ROS2_README.md"
+README_FILE="$HOME/ros_development_config/general/ros2/ROS2_README.md"
 
 function colcon_setup()
 {
