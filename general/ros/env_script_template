@@ -1,0 +1,11 @@
+#!/bin/bash
+### MODIFY THIS SCRIPT AS NEEDED
+
+if [ -f "$WS_SOURCE_FILE" ]; then
+  source "$WS_SOURCE_FILE"
+else
+  yellow=`tput setaf 3`
+  reset=`tput sgr0`
+  echo "${yellow}The source file \"$WS_SOURCE_FILE\" was not found, rebuild the workspace${reset}"
+fi
+
