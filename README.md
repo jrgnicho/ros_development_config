@@ -7,10 +7,6 @@ Various scripts for facilitating ROS and ROS2 development
 	cd
 	git clone https://github.com/jrgnicho/ros_development_config.git	
 	```
-+  Select the branch corresponding to your linux environment, for instance in linux **bionic** do:
-	```
-	cd ~/ros_development_config
-	```
 
 +  Add the following line to your bash file ".bashrc":
 	
