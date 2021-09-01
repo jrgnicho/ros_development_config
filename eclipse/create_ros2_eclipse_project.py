@@ -89,7 +89,7 @@ if __name__ == '__main__':
         sys.exit(-1)
 
     # running colcon cmake to create project files
-    colcon_cmake_config_cmd = 'colcon build --packages-select {} --cmake-force-configure --cmake-args -G"Eclipse CDT4 - Unix Makefiles"'.format(colcon_pkg)
+    colcon_cmake_config_cmd = 'colcon build --packages-select {} --symlink-install --cmake-force-configure --cmake-args -G"Eclipse CDT4 - Unix Makefiles"'.format(colcon_pkg)
     print('Creating project files with command:\n"{}"'.format(colcon_cmake_config_cmd))
     try:
       process = subprocess.run(colcon_cmake_config_cmd, shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True)
