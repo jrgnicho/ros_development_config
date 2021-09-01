@@ -1,11 +1,16 @@
 #!/bin/bash
 ### MODIFY THIS SCRIPT AS NEEDED
 
-if [ -f "$WS_SOURCE_FILE" ]; then
-  source "$WS_SOURCE_FILE"
-else
-  yellow=`tput setaf 3`
-  reset=`tput sgr0`
-  echo "${yellow}The source file \"$WS_SOURCE_FILE\" was not found, rebuild the workspace${reset}"
-fi
+function source_ws_file {
+  SRC_FILE_SCRIPT=$1
+  if [ -f "$SRC_FILE_SCRIPT" ]; then
+    source "$SRC_FILE_SCRIPT"
+  else
+    yellow=`tput setaf 3`
+    reset=`tput sgr0`
+    echo "${yellow}The source file \"$SRC_FILE_SCRIPT\" was not found, rebuild the workspace${reset}"
+  fi
+}
+
+source_ws_file $WS_SOURCE_FILE
 
