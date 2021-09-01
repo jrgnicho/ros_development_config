@@ -36,7 +36,7 @@ source "/opt/ros/$ROS2_DISTRO/setup.bash"
 
 # ros2 workspace setup script (default)
 ROS2WS_SOURCE_SCRIPT="$ROS2WS_DIR/install/setup.bash"
-COLCON_SETUP_SCRIPT="$LINUX_CONF_PATH/general/colcon_ws_setup.py"
+COLCON_SETUP_SCRIPT="$LINUX_CONF_PATH/general/ros2/colcon_ws_setup.py"
 
 if ! [ -f "$ROS2WS_SOURCE_SCRIPT" ]; then
 	echo "$(tput setaf 1)Error sourcing the ros2 workspace setup script $ROS2WS_SOURCE_SCRIPT$(tput sgr0)"
