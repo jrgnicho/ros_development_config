@@ -66,5 +66,11 @@ export ROSCONSOLE_FORMAT='[${severity}]: ${message};'
 alias env_source="source $CUSTOM_SETUP_SCRIPT_PATH"
 alias create_eclipse_proj="$HOME/ros_development_config/eclipse/create_ros1_eclipse_project.py"
 
-PS1="$CATKIN_WS[ros-$ROS_DISTRO]: "
+# [Prompt setup] 
+cd "$CATKIN_DIR"
+PS1="$CATKIN_WS[ros-$ROS_DISTRO]: " # ros distro and workspace
+PS1+='\[\033[01;34m\]\w\[\033[00m\]' # working directory
+PS1+=' $(__git_ps1 "\[\e[0;32m\](%s)\[\e[0m\]")' # git branch
+PS1+=' ${STY}' # screen session name
+PS1+=' \n$ ' # new line with $
 echo "$(tput setaf 3)ROS \"$CATKIN_WS\" workspace is ready$(tput sgr0)"
