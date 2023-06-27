@@ -1,13 +1,16 @@
-## Eclipse C/C++ ROS
+# Eclipse C/C++ ROS
 
-#### Prerequisites:
--	Install Eclipse CDT (Tested on mars only)
--	Install ROS
--	Create a catkin workspace
--	Install [eclipsify](https://github.com/ethz-asl/eclipsify)
--	Install all ROS and system dependencies required by your application in the caktin workspace using `rosdep` and `wstools`
+This has been tested on Eclipse CDT Version: 11.1.1.202303201430
 
-#### Enable Debugging:
+---
+
+## Prerequisites:
+-	[Install Eclipse CDT](https://projects.eclipse.org/projects/tools.cdt)
+-	Install ROS or ROS2 depending or your need
+-	Create a colcon workspace (or catkin workspace if on ROS1) 
+-	Install all ROS|ROS2 and system dependencies required by your application in the caktin|colcon workspace using `rosdep` and `wstools`|`vcs tools`
+
+## Enable Debugging:
 - Enable ptracing:  
   In linux 10.10 and greater, ptracing of non-child processes by non-root users is disabled by default. As a consequence, debugging with gdb through eclipse won't be possible.  To permanently allow it edit **/etc/sysctl.d/10-ptrace.conf** and change the line:
   
@@ -23,7 +26,14 @@
   
   For more on this issue see [here](https://askubuntu.com/questions/41629/after-upgrade-gdb-wont-attach-to-process)
  
-#### Create Eclipse Projects  
+## Create Eclipse Projects  
+### ROS 2
+- In the root directory of your colcon workspace run the following for a specific package
+    ```
+    create_eclipse_proj my_ros2_package
+    ```
+
+### ROS 1
 - For **catkin-tools**
       - The `create_eclipse_projects` generates **.project** files for eclipse for each ros package
         ```
@@ -36,20 +46,20 @@
    	```catkin_make -DCMAKE_BUILD_TYPE=Debug --force-cmake -G"Eclipse CDT4 - Unix Makefiles" ```
   - For more information on creating eclipse project files see the **Eclipse** section [here](http://wiki.ros.org/IDEs)
 
-#### Eclipse CDT Setup:
+## Eclipse CDT Setup:
 -	Import Project:  
 
-    - File->Import->General -> Existing Projects Into Workspace -> Browse to your catkin workspace “build” directory -> Finish
+    - File->Import->General -> Existing Projects Into Workspace -> Browse to your catkin workspace “projects” directory -> Finish
     - Check the projects that you'd like to add into the eclipse workspace and click "Finish".
     
--	Configure Project for c++11 or higher (optional) :
+-	Configure Project for c++20 or higher (optional) :
     - Enter the **Properties** window of any project.
     - Navigate to C/C++ General -> Preprocessor Include Path, Macros etcc
     - In the “Providers” tab, select and check the “CDT GCC Built-in Compiler Settings [Shared]” checkbox.
     - Check the **Use global provider shared between projects** and then click **Workspace Settings**
     - In the **Settings** window go into the **Discovery** tab.
     - Select **CDT GCC Buit-in Compiler Settings [Shared]**
-    - Add `-std=c++11` at the end of the text in the **Command to get compiler specs** text box.
+    - Add `-std=c++20` at the end of the text in the **Command to get compiler specs** text box.
     - Click **Apply and Close** on all open windows.
    
 - Turn off code analysis (optional)
@@ -58,12 +68,18 @@
     -	In the Code Analysis Window uncheck everything except for the “Potential Programming Problems” checkbox then hit “Apply” and “OK”.
 
 
-#### Eclipse CDT Debugging  
+## Eclipse CDT Debugging  
 Debugging requires that you build your project in *Debug* mode, for instance you would run the following command
-to build your full catkin workspace in *Debug*:
-```
-catkin build --cmake-args -DCMAKE_BUILD_TYPE=Debug
-```
+to build your full ros|ros2 package(s) in *Debug*:
+- ROS2
+  ```
+  colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo --packages-select <my_ros2_package>
+  ```
+
+- ROS1
+  ```
+  catkin build --cmake-args -DCMAKE_BUILD_TYPE=Debug
+  ```
 
 Alternatively, you can change the build command in the eclipse project and add the `--cmake-args -DCMAKE_BUILD_TYPE=Debug` part to the build command in the project **Properties** (eclipsify setup only)
 
@@ -73,7 +89,7 @@ There are multiple debugging modes supported by Eclipse CDT, the following secti
     - Go to **Run** -> **Debug Configuration**
     - Double click on **C/C++ Attach to Application** to create a new configuration
     - Edit the name of the configuration if desired
-    - In the **C/C++ Application:** section, browse to the application or binary that you intend to debug.  These are usually located in the **devel** directory of the catkin workspace.
+    - In the **C/C++ Application:** section, browse to the application or binary that you intend to debug.  These are usually located in the **install** directory of the colcon workspace (devel directory in catkin for ROS1).
     - Now go to the **Debugger** tab and locate the **GDB command line** textbox.
     - Click **Browse** and locate the *gdbinit* file located in the **gdb** directory of this repo.  This will apply formatting to the gdb debugger output.  
     - Click **Apply**
@@ -83,27 +99,31 @@ There are multiple debugging modes supported by Eclipse CDT, the following secti
     - You may have to click the "Resume" green arrow to let the application run.
     
 -   C/C++ Remote Application:
-    This mode allows starting and debugging ros nodes and launch files
+    This mode allows connecting to a running ros application 
     - Go to **Run** -> **Debug Configuration**
     - Double click on **C/C++ Remote Application** to create a new configuration
     - Edit the name of the configuration if desired.
-    - In the **C/C++ Application:** section, browse to the application or binary that you intend to debug.  These are usually located in the **devel** directory of the catkin workspace.
-    - Do the same for on the **Remote Absolute File Path for C/C++ Application** textbox.
-    - In the **Commands to execute before application** textbox, enter the full rosrun or roslaunch command that starts the node you intend to debug.
+    - In the **C/C++ Application:** section, browse to the application or binary that you intend to debug.  These are usually located in the **install** directory of the colcon workspace.
     - Now go to the **Debugger** tab and locate the **GDB command line** textbox.
     - Click **Browse** and locate the *gdbinit* file located in the **gdb** directory of this repo.  This will apply formatting to the gdb debugger output.  
-    - Go to the **Gdbserver Settings** subtab and make a note of the port number.
+    - Go to the **Connection** subtab and make a note of the *Port Number*, it will be needed in a subsequent step.
     - Click **Apply** and then **Close**
     - Follow for launch file:
         - If debugging a ros launch file then it'll be necessary to add a 'launch-prefix' attribute to the node.
-        - Open your launch file and locate the <node> tag for your node and set the *launch-prefix* as follows: `launch-prefix="gdbserver localhost:<port number>"`. Remember to replace **<port number>** with the port number observed in the **GdbServer Settings** subtab.
+        - If in ROS2
+          - In the launch file set the **prefix** argument to the Node `prefix = gdbserver localhost:<port number>`. Remember to replace **<port number>** with the port number observed in the **Debugger -> Connections** subtab.
+        - If in ROS1
+          - Open your launch file and locate the <node> tag for your node and set the *launch-prefix* as follows: `launch-prefix="gdbserver localhost:<port number>"`. Remember to replace **<port number>** with the port number observed in the **GdbServer Settings** subtab.
     - Follow for just a ros node:
-        - Just run your node with the `--prefix` argument as follows: 
+        - Just run your node with the `--prefix` argument as follows:
+            ROS1
             ```
             rosrun --prefix gdbserver localhost:<port number> my_pkg my_ros_node
             ```
             Obviously you would enter the port number observed in the **GdbServer Settings** subtab.
-    - Go back to the **Debug Configurations** window, select your newly created configuration and click debug.
-    - At this point eclipse will run your program and go into the **Debug** Context.
+    - Run your node or launch file.
+    - Go back to the **Debug Configurations** window, select your newly created configuration and click the "Debug" button.
+    - At this point eclipse will attach to your program and go into the **Debug** Context.
+    - It will take a little while for the application to laod, you may need to click the green arrow to proceed.
 
 
