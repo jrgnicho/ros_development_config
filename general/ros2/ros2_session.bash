@@ -7,6 +7,7 @@ ROS_SYSTEM_PATH="/opt/ros"
 CUSTOM_WS_SETUP_SCRIPT="env.bash"
 CUSTOM_WS_SCRIPT_TEMPLATE="ros2/env_script_template"
 CREATE_NEW_WS=false
+IGNORE_DISTRO_CHECK=false
 TEMP_BASH_FILE="bashrc_ros2.tmp"
 ROS_ENV_SETUP_SCRIPT="ros2/ros2_env_setup.bash"
 ROS_CREATE_WS_SCRIPT="ros2/ros2_create_ws.bash"
@@ -15,12 +16,13 @@ SELECTED_BUILD_TOOL="${BUILD_TOOLS[0]}"
 TERMINAL_OPTIONS=("terminator" "mate-terminal")
 TERMINAL_SELECTION="${TERMINAL_OPTIONS[0]}"
 
-SHORT_OPTIONS="r:w:l:p:c::h"
-LONG_OPTIONS="ros2-distro:,workspace:,list-workspaces:,profile:,create::,help"
+SHORT_OPTIONS="r:w:l:p:c::i::h"
+LONG_OPTIONS="ros2-distro:,workspace:,list-workspaces:,profile:,create:,ignore-distro-check:,help"
 HELP_TEXT="Usage:\n
 -r|--ros2-distro [ros2-distro] -w|--workspace [workspace name]\n
 -l|--list-workspaces [ros2-distro]\n
 -c|--ros2-distro [ros2-distro] -w|--workspace [workspace name] --create\n
+-i|--ignore-distro-check: Ignores missing ros distro in system directory.\n
 -h|--help \n"
 
 function check_colcon()
@@ -160,6 +162,12 @@ function main()
 					exit 0
 				fi
 				;;
+				
+			-i|--ignore-distro-check)
+			
+			  IGNORE_DISTRO_CHECK=true
+			  shift 1
+			  ;;
 
 			-h|--help)
 				echo -e $HELP_TEXT
@@ -215,9 +223,13 @@ function main()
 	fi
 
 	# check ros distro
-	if (! check_supported_ros_distro $ROS2_DISTRO); then
-		echo "$(tput setaf 1)ROS2 Distribution '$ROS2_DISTRO' was not found$(tput sgr0)"
-		exit 1
+	if (! check_supported_ros_distro $ROS2_DISTRO); then	
+		
+		if ! "$IGNORE_DISTRO_CHECK"; then
+		  echo "$(tput setaf 1)ROS2 Distribution '$ROS2_DISTRO' was not found$(tput sgr0)"
+		  exit 1
+		fi
+	  echo "$(tput setaf 3)ROS2 Distribution '$ROS2_DISTRO' was not found, -i option was passed so skipping distro check$(tput sgr0)"
 	fi
 
 	if (! check_ros2_workspace_exists $ROS2_WS $ROS2_DISTRO); then
@@ -267,29 +279,24 @@ function main()
     echo "####### WARNING - DO NOT DELETE THIS ######" >> $CUSTOM_DISTRO_SETUP_SCRIPT
   fi
 
-  # check if custom worspace level setup script exists
+  # check if custom worspace specific setup script exists
   CUSTOM_WS_SETUP_SCRIPT_PATH="$ROS2WS_DIR/$CUSTOM_WS_SETUP_SCRIPT"
   if ! [ -f "$CUSTOM_WS_SETUP_SCRIPT_PATH" ]; then
 	  echo "$(tput setaf 3)Creating workspace setup script $CUSTOM_WS_SETUP_SCRIPT_PATH$(tput sgr0)"
-    #echo "#!/bin/bash" > $CUSTOM_WS_SETUP_SCRIPT_PATH
-    #echo "source \"/usr/share/colcon_cd/function/colcon_cd.sh\"" >> $CUSTOM_WS_SETUP_SCRIPT_PATH
-    #echo "source \"/usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash\"" >> $CUSTOM_WS_SETUP_SCRIPT_PATH
-    #echo "source $CUSTOM_DISTRO_SETUP_SCRIPT" >> $CUSTOM_WS_SETUP_SCRIPT_PATH
-    #echo "source $WS_SETUP_SCRIPT" >> $CUSTOM_WS_SETUP_SCRIPT_PATH
 
     cat "$HOME/ros_development_config/general/$CUSTOM_WS_SCRIPT_TEMPLATE" > $CUSTOM_WS_SETUP_SCRIPT_PATH
     sed -i "7 i source $CUSTOM_DISTRO_SETUP_SCRIPT" $CUSTOM_WS_SETUP_SCRIPT_PATH
     sed -i "8 i WS_SOURCE_FILE=$WS_SETUP_SCRIPT" $CUSTOM_WS_SETUP_SCRIPT_PATH
   fi
 	
-	###############  launch terminals ###############   
-	if [ "$TERMINAL_SELECTION" == "${TERMINAL_OPTIONS[0]}" ]; then
-		launch_terminator_terminal
-	elif [ "$TERMINAL_SELECTION" == "${TERMINAL_OPTIONS[1]}" ]; then
-		launch_mate_terminal
-	else
-		launch_terminator_terminal
-	fi
+  ###############  launch terminals ###############   
+  if [ "$TERMINAL_SELECTION" == "${TERMINAL_OPTIONS[0]}" ]; then
+      launch_terminator_terminal
+  elif [ "$TERMINAL_SELECTION" == "${TERMINAL_OPTIONS[1]}" ]; then
+      launch_mate_terminal
+  else
+      launch_terminator_terminal
+  fi
 	
 }
 

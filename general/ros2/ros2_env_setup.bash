@@ -65,4 +65,4 @@ PS1+=' $(__git_ps1 "\[\e[0;32m\](%s)\[\e[0m\]")' # git branch
 PS1+=' ${STY}' # screen session name
 PS1+=' \n$ ' # new line with $
 
-echo "$(tput setaf 3)ROS2 \"$ROS2_WS\" workspace is ready$(tput sgr0)"
+echo "$(tput setaf 6)ROS2 \"$ROS2_WS\" workspace is ready$(tput sgr0)"
