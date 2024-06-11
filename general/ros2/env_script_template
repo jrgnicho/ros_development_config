@@ -17,4 +17,3 @@ function source_ws_file {
 }
 
 source_ws_file $WS_SOURCE_FILE
-

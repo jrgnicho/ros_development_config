@@ -32,14 +32,14 @@ if [ ! -d "$COLCON_HOME" ]; then
 fi
 
 # ros system setup script
-source "/opt/ros/$ROS2_DISTRO/setup.bash"
+#source "/opt/ros/$ROS2_DISTRO/setup.bash"
 
 # ros2 workspace setup script (default)
 ROS2WS_SOURCE_SCRIPT="$ROS2WS_DIR/install/setup.bash"
 COLCON_SETUP_SCRIPT="$LINUX_CONF_PATH/general/ros2/colcon_ws_setup.py"
 
 if ! [ -f "$ROS2WS_SOURCE_SCRIPT" ]; then
-	echo "$(tput setaf 1)Error sourcing the ros2 workspace setup script $ROS2WS_SOURCE_SCRIPT$(tput sgr0)"
+	echo "$(tput setaf 1)Error: The ros2 workspace setup script $ROS2WS_SOURCE_SCRIPT was not found.$(tput sgr0)"
   exit 1
 fi
 

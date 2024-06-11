@@ -285,8 +285,9 @@ function main()
 	  echo "$(tput setaf 3)Creating workspace setup script $CUSTOM_WS_SETUP_SCRIPT_PATH$(tput sgr0)"
 
     cat "$HOME/ros_development_config/general/$CUSTOM_WS_SCRIPT_TEMPLATE" > $CUSTOM_WS_SETUP_SCRIPT_PATH
-    sed -i "7 i source $CUSTOM_DISTRO_SETUP_SCRIPT" $CUSTOM_WS_SETUP_SCRIPT_PATH
-    sed -i "8 i WS_SOURCE_FILE=$WS_SETUP_SCRIPT" $CUSTOM_WS_SETUP_SCRIPT_PATH
+    sed -i "7 i source /opt/ros/$ROS2_DISTRO/setup.bash" $CUSTOM_WS_SETUP_SCRIPT_PATH
+    sed -i "8 i source $CUSTOM_DISTRO_SETUP_SCRIPT" $CUSTOM_WS_SETUP_SCRIPT_PATH
+    sed -i "9 i WS_SOURCE_FILE=$WS_SETUP_SCRIPT" $CUSTOM_WS_SETUP_SCRIPT_PATH
   fi
 	
   ###############  launch terminals ###############   
